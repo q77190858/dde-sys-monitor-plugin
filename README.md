@@ -14,5 +14,15 @@
 编译加安装：
 `./build.sh`
 
+吐槽一下官方的开发文档讲得环境配置不全，老是报错，需要安装如下：
+```
+sudo apt-get install dde-dock-dev 
+sudo apt-get install qtbase5-dev-tools
+sudo apt-get install libdtkwidget-dev
+```
+
+有问题欢迎回帖反馈！开发的心得体会参见我的博客
+[http://blog.mxslly.com/archives/95.html](http://blog.mxslly.com/archives/95.html)
+
 编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/build/libsys_monitor.so)
 deepin15.10.1测试可用
