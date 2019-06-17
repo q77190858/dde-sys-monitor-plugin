@@ -14,5 +14,5 @@
 编译加安装：
 `./build.sh`
 
-编译好的so [下载](build/libsys_monitor.so)
+编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/build/libsys_monitor.so)
 deepin15.10.1测试可用
