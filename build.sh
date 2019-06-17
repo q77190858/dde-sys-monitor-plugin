@@ -1,5 +1,5 @@
 #!/bin/bash
-cd -p ~/plugin-guide/sys_monitor/build/
+cd ~/plugin-guide/sys_monitor/build/
 rm -rf *
 cmake ..
 make

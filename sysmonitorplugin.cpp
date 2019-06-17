@@ -86,6 +86,7 @@ void SysMonitorPlugin::refreshInfo()
 const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int digit)
 {
 	int count;
+	QString str;
 	double f=(double)l;
 	if(!strcmp(unit,"B"))count=0;
 	else if(!strcmp(unit,"KB"))count=1;
@@ -95,17 +96,17 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 		count++;
 	}
 	
-	if(f<=9)s="  "+QString::number(f,'f',digit);
-	else if(f<=99)s=" "+QString::number(f,'f',digit);
-	else s=QString::number(f,'f',digit);
+	if(f<=9)str="  "+QString::number(f,'f',digit);
+	else if(f<=99)str=" "+QString::number(f,'f',digit);
+	else str=QString::number(f,'f',digit);
 	
-	if(count==0)s+=" B";
-    else if(count==1)s+="KB";
-	else if(count==2)s+="MB";
-	else if(count==3)s+="GB";
-	else if(count==4)s+="TB";
+	if(count==0)str+=" B";
+    else if(count==1)str+="KB";
+	else if(count==2)str+="MB";
+	else if(count==3)str+="GB";
+	else if(count==4)str+="TB";
 	else if(count==4)s+="PB";
-	return s;
+	return str;
 }
 
 const QString SysMonitorPlugin::pluginDisplayName() const
