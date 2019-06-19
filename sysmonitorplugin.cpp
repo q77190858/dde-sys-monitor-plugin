@@ -126,6 +126,9 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
     m_pluginWidget = new InformationWidget;
     m_tipsWidget = new QLabel;
     m_appletWidget = new QLabel;
+	font.setFamily("Noto Mono");
+	m_tipsWidget->setFont(font);
+	m_appletWidget->setFont(font);
 
     // 如果插件没有被禁用则在初始化插件时才添加主控件到面板上
     if (!pluginIsDisable()) {
@@ -143,9 +146,9 @@ QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
 QWidget *SysMonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
-
+	
     // 设置/刷新 tips 中的信息
-    m_tipsWidget->setText(QString("MEM:%1/%2=%3\nSWAP:%4/%5=%6\nUP:%7 %8/S\nDOWN:%9 %10/S")
+    m_tipsWidget->setText(QString("MEM: %1/%2=%3\nSWAP:%4/%5=%6\nUP:  %7 %8/S\nDOWN:%9 %10/S")
                             .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(strmem)
                             .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
                             .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
@@ -159,7 +162,7 @@ QWidget *SysMonitorPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    m_appletWidget->setText(QString("MEM:%1/%2=%3\nSWAP:%4/%5=%6\nUP:%7 %8/S\nDOWN:%9 %10/S")
+    m_appletWidget->setText(QString("MEM: %1/%2=%3\nSWAP:%4/%5=%6\nUP:  %7 %8/S\nDOWN:%9 %10/S")
                             .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(strmem)
                             .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
                             .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))

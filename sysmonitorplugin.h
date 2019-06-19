@@ -56,6 +56,8 @@ private:
 	unsigned long rbytes,sbytes,oldrbytes,oldsbytes,tmpr,tmps;
 	char devname[1024];
 	QString s,r;
+	// 字体
+	QFont font;
 
 private:
     // 处理时间间隔的计时器

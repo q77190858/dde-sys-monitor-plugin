@@ -12,7 +12,7 @@ InformationWidget::InformationWidget(QWidget *parent)
     m_infoLabel->setStyleSheet("QLabel {"
                                "color: white;"
                                "}");
-    m_infoLabel->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
+    //m_infoLabel->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
     font.setFamily("Noto Mono");
 	m_infoLabel->setFont(font);
 
@@ -26,7 +26,7 @@ InformationWidget::InformationWidget(QWidget *parent)
 
 void InformationWidget::UpdateData(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes)
 {
-	m_infoLabel->setText(QString("CPU:%1 ↑%2/S\nMEM:%3 ↓%4/S")
+	m_infoLabel->setText(QString("CPU:%1↑%2/S\nMEM:%3↓%4/S")
 						 .arg(cpu).arg(sbytes)
 						 .arg(mem).arg(rbytes));
 }
