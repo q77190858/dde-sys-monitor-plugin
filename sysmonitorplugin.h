@@ -30,6 +30,7 @@ public:
 
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
+	void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
 	const QString toHumanRead(unsigned long l,const char *unit,int digit);
 private slots:
@@ -58,6 +59,8 @@ private:
 	QString s,r;
 	// 字体
 	QFont font;
+	//显示模式
+	Dock::DisplayMode dismode;
 
 private:
     // 处理时间间隔的计时器

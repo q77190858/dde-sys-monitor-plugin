@@ -6,8 +6,6 @@
 InformationWidget::InformationWidget(QWidget *parent)
     : QWidget(parent)
     , m_infoLabel(new QLabel)
-    // 使用 "/home" 初始化 QStorageInfo
-    // 如果 "/home" 没有挂载到一个单独的分区上，QStorageInfo 收集的数据将会是根分区的
 {
     m_infoLabel->setStyleSheet("QLabel {"
                                "color: white;"
@@ -29,4 +27,12 @@ void InformationWidget::UpdateData(const QString &cpu,const QString &mem,const Q
 	m_infoLabel->setText(QString("CPU:%1↑%2/S\nMEM:%3↓%4/S")
 						 .arg(cpu).arg(sbytes)
 						 .arg(mem).arg(rbytes));
+	//m_infoLabel->adjustSize();
+}
+
+void InformationWidget::UpdateData(const QString &sbytes,const QString &rbytes)
+{
+	m_infoLabel->setText(QString("%1/S\n%2/S")
+						 .arg(sbytes)
+						 .arg(rbytes));
 }
