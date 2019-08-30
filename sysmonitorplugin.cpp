@@ -97,16 +97,19 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 		count++;
 	}
 	
-	if(f<=9)str="  "+QString::number(f,'f',digit);
-	else if(f<=99)str=" "+QString::number(f,'f',digit);
-	else str=QString::number(f,'f',digit);
+	if(count==0){count++;f=f/1024;}
 	
-	if(count==0)str+=" B";
-    else if(count==1)str+="KB";
-	else if(count==2)str+="MB";
-	else if(count==3)str+="GB";
-	else if(count==4)str+="TB";
-	else if(count==4)str+="PB";
+	if(f<0.1)str="  0";
+	else if(f<=9)str=QString::number(f,'f',1);
+	else if(f<=99)str=" "+QString::number(f,'f',0);
+	else str=QString::number(f,'f',0);
+	
+	if(count==0)str+="B";
+    else if(count==1)str+="K";
+	else if(count==2)str+="M";
+	else if(count==3)str+="G";
+	else if(count==4)str+="T";
+	else if(count==4)str+="P";
 	return str;
 }
 

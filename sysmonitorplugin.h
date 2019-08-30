@@ -2,7 +2,6 @@
 #define HOMEMONITORPLUGIN_H
 
 #include "informationwidget.h"
-#include <string.h>
 #include <QObject>
 #include <QTimer>
 #include <dde-dock/pluginsiteminterface.h>
