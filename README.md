@@ -5,20 +5,23 @@
 ### 感谢大神@sonichy
 
 ![alt](image/高效模式全显示.png)  ![alt](image/高效模式只显示CPU内存.jpeg)  ![alt](image/高效模式只显示网速.jpeg)
+
 上三图分别是高效模式下：
 1. 全显示
 2. 只显示CPU内存
 3. 只显示网速
 
 ![alt](image/时尚模式只显示CPU内存.jpeg)  ![alt](image/时尚模式只显示网速.jpeg)
+
 上两图分别是时尚模式下：
 1. 只显示CPU内存
 2. 只显示网速
 
 ![alt](image/高效模式右键菜单.jpeg)  ![alt](image/设置显示内容.jpeg)
+
 右键菜单中有设置选项，可以设置各个模式下的显示内容
 
-#编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/bin/libsys_monitor.so)
+#编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/blob/master/bin/libsys_monitor.so)
 deepin15.11测试可用
 
 #直接下载安装：
@@ -46,12 +49,12 @@ sudo apt install qtcreator
 有问题欢迎回帖反馈！开发的心得体会参见我的博客
 [http://blog.mxslly.com/archives/95.html](http://blog.mxslly.com/archives/95.html)
 
-###20190617 22:37更新：修复上传下载一致的bug，下载地址同上
+20190617 22:37更新：修复上传下载一致的bug，下载地址同上
 
-###20190619 12:07更新：缩减宽度，小气泡文字对齐，编译脚本优化，下载地址同上
+20190619 12:07更新：缩减宽度，小气泡文字对齐，编译脚本优化，下载地址同上
 
-###20190627 16:04更新：修复时尚模式显示不全问题，现在时尚模式只显示网速
+20190627 16:04更新：修复时尚模式显示不全问题，现在时尚模式只显示网速
 
-###20190830 03:14更新：缩减1个字符宽度，现在最低单位为KB，不显示B
+20190830 03:14更新：缩减1个字符宽度，现在最低单位为KB，不显示B
 
-###20191211 10:09更新：导入项目到qtcreator，添加设置功能，可设置显示内容
+20191211 10:09更新：导入项目到qtcreator，添加设置功能，可设置显示内容
