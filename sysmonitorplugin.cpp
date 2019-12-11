@@ -80,8 +80,37 @@ void SysMonitorPlugin::refreshInfo()
 	r=toHumanRead(tmpr,"B",0);
 	
     // 更新内容
-    if(m_pluginWidget&&dismode==Dock::Efficient)m_pluginWidget->UpdateData(strcpu,strmem,s,r);//高效模式
-	else m_pluginWidget->UpdateData(s,r);//时尚模式
+    if(dismode==Dock::Efficient)//高效模式
+    {
+        switch (efficient) {
+        case DisplayContentSetting::CPUMEM:
+            m_pluginWidget->UpdateDataCpuMem(strcpu,strmem);
+            break;
+        case DisplayContentSetting::NETSPEED:
+            m_pluginWidget->UpdateDataNetSpeed(s,r);
+            break;
+        case DisplayContentSetting::ALL:
+            m_pluginWidget->UpdateDataAll(strcpu,strmem,s,r);
+            break;
+        default:
+            m_pluginWidget->UpdateDataAll(strcpu,strmem,s,r);
+            break;
+        }
+    }
+    else//时尚模式
+    {
+        switch (fashion) {
+        case DisplayContentSetting::CPUMEM:
+            m_pluginWidget->UpdateDataCpuMem(strcpu,strmem);
+            break;
+        case DisplayContentSetting::NETSPEED:
+            m_pluginWidget->UpdateDataNetSpeed(s,r);
+            break;
+        default:
+            m_pluginWidget->UpdateDataNetSpeed(s,r);
+            break;
+        }
+    }
 }
 
 const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int digit)
@@ -110,7 +139,45 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 	else if(count==3)str+="G";
 	else if(count==4)str+="T";
 	else if(count==4)str+="P";
-	return str;
+    return str;
+}
+//从主目录下配置文件读配置信息
+void SysMonitorPlugin::readConfig(DisplayContentSetting *efficient, DisplayContentSetting *fashion)
+{
+    QFile cfg(QDir::homePath()+"/.sysmonitor.cfg");
+    if(cfg.exists())
+    {
+        if(cfg.open(QIODevice::ReadOnly))
+        {
+            QByteArray byte= cfg.readAll();
+            sscanf(byte,"efficientModeDisplayContentSetting: %d\n"
+                        "fashionModeDisplayContentSetting: %d",efficient,fashion);
+        }
+        else
+        {
+            qDebug()<<"open config file failed";
+        }
+    }
+    else
+    {
+        writeConfig(DisplayContentSetting::ALL, DisplayContentSetting::NETSPEED);
+        *efficient=DisplayContentSetting::ALL;
+        *fashion=DisplayContentSetting::NETSPEED;
+    }
+}
+//写配置信息到配置文件
+void SysMonitorPlugin::writeConfig(DisplayContentSetting efficient, DisplayContentSetting fashion)
+{
+    QFile cfg(QDir::homePath()+"/.sysmonitor.cfg");
+    if(cfg.open(QIODevice::WriteOnly))
+    {
+        QString str=QString("efficientModeDisplayContentSetting: %1\nfashionModeDisplayContentSetting: %2").arg(efficient).arg(fashion);
+        cfg.write(str.toLocal8Bit());
+    }
+    else
+    {
+        qDebug()<<"open config file failed";
+    }
 }
 
 const QString SysMonitorPlugin::pluginDisplayName() const
@@ -134,6 +201,8 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
 	m_tipsWidget->setFont(font);
 	m_appletWidget->setFont(font);
 	dismode=displayMode();
+    //读取显示配置
+    readConfig(&efficient,&fashion);
 
     // 如果插件没有被禁用则在初始化插件时才添加主控件到面板上
     if (!pluginIsDisable()) {
@@ -214,15 +283,21 @@ const QString SysMonitorPlugin::itemContextMenu(const QString &itemKey)
 
     QMap<QString, QVariant> refresh;
     refresh["itemId"] = "refresh";
-    refresh["itemText"] = "Refresh";
+    refresh["itemText"] = "刷新";
     refresh["isActive"] = true;
     items.push_back(refresh);
 
     QMap<QString, QVariant> open;
     open["itemId"] = "open";
-    open["itemText"] = "Open system-monitor";
+    open["itemText"] = "打开系统监视器";
     open["isActive"] = true;
     items.push_back(open);
+
+    QMap<QString, QVariant> setting;
+    setting["itemId"] = "setting";
+    setting["itemText"] = "设置";
+    setting["isActive"] = true;
+    items.push_back(setting);
 
     QMap<QString, QVariant> menu;
     menu["items"] = items;
@@ -240,8 +315,16 @@ void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &me
     // 根据上面接口设置的 id 执行不同的操作
     if (menuId == "refresh") {
         
-    } else if ("open") {
+    } else if (menuId == "open") {
         QProcess::startDetached("deepin-system-monitor");
+    }
+    else if(menuId == "setting") {
+        pluginSettingDialog setting(efficient,fashion);
+        if(setting.exec()==QDialog::Accepted)
+        {
+            setting.getDisplayContentSetting(&efficient,&fashion);
+            writeConfig(efficient,fashion);
+        }
     }
 }
 

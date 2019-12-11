@@ -4,7 +4,10 @@
 #include "informationwidget.h"
 #include <QObject>
 #include <QTimer>
+#include <QFile>
+#include <cstdio>
 #include <dde-dock/pluginsiteminterface.h>
+#include "pluginsettingdialog.h"
 
 class SysMonitorPlugin : public QObject, PluginsItemInterface
 {
@@ -32,6 +35,10 @@ public:
 	void displayModeChanged(const Dock::DisplayMode displayMode) override;
 
 	const QString toHumanRead(unsigned long l,const char *unit,int digit);
+
+    //自定义读写配置函数
+    void readConfig(DisplayContentSetting *efficient,DisplayContentSetting *fashion);
+    void writeConfig(DisplayContentSetting efficient,DisplayContentSetting fashion);
 private slots:
     // 用于更新数据的槽函数
     void refreshInfo();
@@ -60,6 +67,9 @@ private:
 	QFont font;
 	//显示模式
 	Dock::DisplayMode dismode;
+    //高效模式和时尚模式显示内容设置
+    DisplayContentSetting efficient;
+    DisplayContentSetting fashion;
 
 private:
     // 处理时间间隔的计时器

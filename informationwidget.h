@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QObject>
 #include <QStorageInfo>
+#include "pluginsettingdialog.h"
 
 class InformationWidget : public QWidget
 {
@@ -13,8 +14,10 @@ class InformationWidget : public QWidget
 
 public:
     explicit InformationWidget(QWidget *parent = nullptr);
-    void UpdateData(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes);
-	void UpdateData(const QString &sbytes,const QString &rbytes);
+    void UpdateDataCpuMem(const QString &cpu,const QString &mem);
+    void UpdateDataNetSpeed(const QString &sbytes,const QString &rbytes);
+    void UpdateDataAll(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes);
+
 public:
     // 真正的数据显示在这个 Label 上
     QLabel *m_infoLabel;

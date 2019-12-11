@@ -1,5 +1,4 @@
 #include "informationwidget.h"
-
 #include <QVBoxLayout>
 #include <QDebug>
 
@@ -22,17 +21,23 @@ InformationWidget::InformationWidget(QWidget *parent)
     setLayout(centralLayout);
 }
 
-void InformationWidget::UpdateData(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes)
+void InformationWidget::UpdateDataCpuMem(const QString &cpu, const QString &mem)
+{
+    m_infoLabel->setText(QString("CPU:%1\nMEM:%3")
+                         .arg(cpu)
+                         .arg(mem));
+}
+
+void InformationWidget::UpdateDataAll(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes)
 {
 	m_infoLabel->setText(QString("CPU:%1↑%2/S\nMEM:%3↓%4/S")
 						 .arg(cpu).arg(sbytes)
 						 .arg(mem).arg(rbytes));
-	//m_infoLabel->adjustSize();
 }
 
-void InformationWidget::UpdateData(const QString &sbytes,const QString &rbytes)
+void InformationWidget::UpdateDataNetSpeed(const QString &sbytes,const QString &rbytes)
 {
-	m_infoLabel->setText(QString("%1/S\n%2/S")
+    m_infoLabel->setText(QString("↑%1/S\n↓%2/S")
 						 .arg(sbytes)
 						 .arg(rbytes));
 }
