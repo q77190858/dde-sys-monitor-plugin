@@ -21,7 +21,7 @@
 
 右键菜单中有设置选项，可以设置各个模式下的显示内容
 
-#编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/blob/master/bin/libsys_monitor.so)
+#编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 deepin15.11测试可用
 
 #直接下载安装：
