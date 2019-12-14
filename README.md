@@ -21,17 +21,17 @@
 
 右键菜单中有设置选项，可以设置各个模式下的显示内容
 
-#编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
+# 编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 deepin15.11测试可用
 
-#直接下载安装：
+# 直接下载安装：
 ```
 sudo cp libsys_monitor.so /usr/lib/dde-dock/plugins/
 pkill dde-dock
 dde-dock
 ```
 
-#编译加安装：
+# 编译加安装：
 `./build.sh`
 
 编译教程见[官方开发文档](https://github.com/linuxdeepin/dde-dock/blob/master/plugins/plugin-guide/plugins-developer-guide.md
