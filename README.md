@@ -1,6 +1,5 @@
 # dde-sys-monitor-plugin
 ## deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使用率、上传下载总量和实时网速
-## dde-dock system monitor plugin
 ### 参考了https://github.com/sonichy/CMDU_DDE_DOCK
 ### 感谢大神@sonichy
 
@@ -17,7 +16,7 @@
 1. 只显示CPU内存
 2. 只显示网速
 
-![alt](image/高效模式右键菜单.jpeg)  ![alt](image/设置显示内容.jpeg)
+![alt](image/高效模式右键菜单.jpeg)  ![alt](image/设置显示内容.png)
 
 右键菜单中有设置选项，可以设置各个模式下的显示内容
 
