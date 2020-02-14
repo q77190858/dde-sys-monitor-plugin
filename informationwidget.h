@@ -5,8 +5,15 @@
 #include <QLabel>
 #include <QTimer>
 #include <QObject>
-#include <QStorageInfo>
+#include <dde-dock/pluginsiteminterface.h>
 #include "pluginsettingdialog.h"
+
+struct Info{
+    QString cpu;
+    QString mem;
+    QString netup;
+    QString netdwon;
+};
 
 class InformationWidget : public QWidget
 {
@@ -14,9 +21,7 @@ class InformationWidget : public QWidget
 
 public:
     explicit InformationWidget(QWidget *parent = nullptr);
-    void UpdateDataCpuMem(const QString &cpu,const QString &mem);
-    void UpdateDataNetSpeed(const QString &sbytes,const QString &rbytes);
-    void UpdateDataAll(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes);
+    void UpdateData(const Info& info,Dock::DisplayMode dismode,const Settings& settings);
 
 public:
     // 真正的数据显示在这个 Label 上

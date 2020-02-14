@@ -29,8 +29,8 @@ void SysMonitorPlugin::refreshInfo()
     cpuPercent = qRound((worktime-oldworktime)*100.0/(totaltime-oldtotaltime));
     oldtotaltime=totaltime;
     oldworktime=worktime;
-	if(cpuPercent<=9)strcpu=QString(" %1\%").arg(cpuPercent);
-	else strcpu=QString("%1\%").arg(cpuPercent);
+    if(cpuPercent<=9)info.cpu=QString(" %1\%").arg(cpuPercent);
+    else info.cpu=QString("%1\%").arg(cpuPercent);
 	
 	//获得内存信息
     fp=fopen("/proc/meminfo","r");
@@ -47,8 +47,8 @@ void SysMonitorPlugin::refreshInfo()
 	}while(strcmp(devname,"SwapFree:"));
     fclose(fp);
 	memPercent = qRound((totalmem - availablemem) * 100.0 / totalmem);
-	if(memPercent<=9)strmem=QString(" %1\%").arg(memPercent);
-	else strmem=QString("%1\%").arg(memPercent);
+    if(memPercent<=9)info.mem=QString(" %1\%").arg(memPercent);
+    else info.mem=QString("%1\%").arg(memPercent);
 	
     swapPercent = qRound((totalswap - freeswap) * 100.0 / totalswap);
 	if(swapPercent<=9)strswap=QString(" %1\%").arg(swapPercent);
@@ -76,41 +76,11 @@ void SysMonitorPlugin::refreshInfo()
 	oldrbytes=rbytes;
 	oldsbytes=sbytes;
 	
-	s=toHumanRead(tmps,"B",0);
-	r=toHumanRead(tmpr,"B",0);
+    info.netup=toHumanRead(tmps,"B",0);
+    info.netdwon=toHumanRead(tmpr,"B",0);
 	
     // 更新内容
-    if(dismode==Dock::Efficient)//高效模式
-    {
-        switch (efficient) {
-        case DisplayContentSetting::CPUMEM:
-            m_pluginWidget->UpdateDataCpuMem(strcpu,strmem);
-            break;
-        case DisplayContentSetting::NETSPEED:
-            m_pluginWidget->UpdateDataNetSpeed(s,r);
-            break;
-        case DisplayContentSetting::ALL:
-            m_pluginWidget->UpdateDataAll(strcpu,strmem,s,r);
-            break;
-        default:
-            m_pluginWidget->UpdateDataAll(strcpu,strmem,s,r);
-            break;
-        }
-    }
-    else//时尚模式
-    {
-        switch (fashion) {
-        case DisplayContentSetting::CPUMEM:
-            m_pluginWidget->UpdateDataCpuMem(strcpu,strmem);
-            break;
-        case DisplayContentSetting::NETSPEED:
-            m_pluginWidget->UpdateDataNetSpeed(s,r);
-            break;
-        default:
-            m_pluginWidget->UpdateDataNetSpeed(s,r);
-            break;
-        }
-    }
+    m_pluginWidget->UpdateData(info,dismode,settings);
 }
 
 const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int digit)
@@ -127,10 +97,10 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 	}
 	
 	if(count==0){count++;f=f/1024;}
-	
-	if(f<0.1)str="  0";
+
+    if(f<0.1)str="&nbsp;&nbsp;0";
 	else if(f<=9)str=QString::number(f,'f',1);
-	else if(f<=99)str=" "+QString::number(f,'f',0);
+    else if(f<=99)str="&nbsp;"+QString::number(f,'f',0);
 	else str=QString::number(f,'f',0);
 	
 	if(count==0)str+="B";
@@ -141,48 +111,26 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 	else if(count==4)str+="P";
     return str;
 }
-//从主目录下配置文件读配置信息
-void SysMonitorPlugin::readConfig(DisplayContentSetting *efficient, DisplayContentSetting *fashion)
+//使用系统配置函数读配置信息
+void SysMonitorPlugin::readConfig(Settings *settings)
 {
-    QFile cfg(QDir::homePath()+"/.sysmonitor.cfg");
-    if(cfg.exists())
-    {
-        if(cfg.open(QIODevice::ReadOnly))
-        {
-            QByteArray byte= cfg.readAll();
-            sscanf(byte,"efficientModeDisplayContentSetting: %d\n"
-                        "fashionModeDisplayContentSetting: %d",efficient,fashion);
-        }
-        else
-        {
-            qDebug()<<"open config file failed";
-        }
-    }
-    else
-    {
-        writeConfig(DisplayContentSetting::ALL, DisplayContentSetting::NETSPEED);
-        *efficient=DisplayContentSetting::ALL;
-        *fashion=DisplayContentSetting::NETSPEED;
-    }
+    settings->efficient=DisplayContentSetting(m_proxyInter->
+                         getValue(this,"efficient",DisplayContentSetting::ALL).toInt());
+    settings->fashion=DisplayContentSetting(m_proxyInter->
+                       getValue(this,"fashion",DisplayContentSetting::NETSPEED).toInt());
+    settings->lineHeight=m_proxyInter->getValue(this,"lineHeight",100).toInt();
 }
-//写配置信息到配置文件
-void SysMonitorPlugin::writeConfig(DisplayContentSetting efficient, DisplayContentSetting fashion)
+//写配置信息
+void SysMonitorPlugin::writeConfig(Settings *settings)
 {
-    QFile cfg(QDir::homePath()+"/.sysmonitor.cfg");
-    if(cfg.open(QIODevice::WriteOnly))
-    {
-        QString str=QString("efficientModeDisplayContentSetting: %1\nfashionModeDisplayContentSetting: %2").arg(efficient).arg(fashion);
-        cfg.write(str.toLocal8Bit());
-    }
-    else
-    {
-        qDebug()<<"open config file failed";
-    }
+    m_proxyInter->saveValue(this,"efficient",settings->efficient);
+    m_proxyInter->saveValue(this,"fashion",settings->fashion);
+    m_proxyInter->saveValue(this,"lineHeight",settings->lineHeight);
 }
 
 const QString SysMonitorPlugin::pluginDisplayName() const
 {
-    return QString("Sys Monitor");
+    return QString("监视器");
 }
 
 const QString SysMonitorPlugin::pluginName() const
@@ -199,10 +147,10 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
     m_appletWidget = new QLabel;
 	font.setFamily("Noto Mono");
 	m_tipsWidget->setFont(font);
-	m_appletWidget->setFont(font);
+    m_appletWidget->setFont(font);
 	dismode=displayMode();
     //读取显示配置
-    readConfig(&efficient,&fashion);
+    readConfig(&settings);
 
     // 如果插件没有被禁用则在初始化插件时才添加主控件到面板上
     if (!pluginIsDisable()) {
@@ -222,13 +170,12 @@ QWidget *SysMonitorPlugin::itemTipsWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 	
     // 设置/刷新 tips 中的信息
-    m_tipsWidget->setText(QString("MEM: %1/%2=%3\nSWAP:%4/%5=%6\nUP:  %7 %8/S\nDOWN:%9 %10/S")
-                            .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(strmem)
+    m_tipsWidget->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S</p>")
+                            .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
                             .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
                             .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
                             .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
                             );
-
     return m_tipsWidget;
 }
 
@@ -236,13 +183,12 @@ QWidget *SysMonitorPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    m_appletWidget->setText(QString("MEM: %1/%2=%3\nSWAP:%4/%5=%6\nUP:  %7 %8/S\nDOWN:%9 %10/S")
-                            .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(strmem)
+    m_appletWidget->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S</p>")
+                            .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
                             .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
                             .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
                             .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
                             );
-	
     return m_appletWidget;
 }
 
@@ -319,11 +265,11 @@ void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &me
         QProcess::startDetached("deepin-system-monitor");
     }
     else if(menuId == "setting") {
-        pluginSettingDialog setting(efficient,fashion);
+        pluginSettingDialog setting(&settings);
         if(setting.exec()==QDialog::Accepted)
         {
-            setting.getDisplayContentSetting(&efficient,&fashion);
-            writeConfig(efficient,fashion);
+            setting.getDisplayContentSetting(&settings);
+            writeConfig(&settings);
         }
     }
 }

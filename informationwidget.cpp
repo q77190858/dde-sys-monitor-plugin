@@ -1,6 +1,8 @@
 #include "informationwidget.h"
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QScreen>
+#include <QApplication>
 
 InformationWidget::InformationWidget(QWidget *parent)
     : QWidget(parent)
@@ -11,6 +13,10 @@ InformationWidget::InformationWidget(QWidget *parent)
                                "}");
     //m_infoLabel->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
     font.setFamily("Noto Mono");
+    // 获取dpi，一般默认都是96，根据dpi进行字体的缩放，直接设置pointsize无法解决hidpi问题
+    int dpi = QApplication::primaryScreen()->logicalDotsPerInch();
+    int fontsize = 9; // >10在时尚模式下有些显示不全
+    font.setPixelSize((dpi*fontsize)/72);
 	m_infoLabel->setFont(font);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
@@ -21,23 +27,58 @@ InformationWidget::InformationWidget(QWidget *parent)
     setLayout(centralLayout);
 }
 
-void InformationWidget::UpdateDataCpuMem(const QString &cpu, const QString &mem)
+void InformationWidget::UpdateData(const Info& info,Dock::DisplayMode dismode,const Settings& settings)
 {
-    m_infoLabel->setText(QString("CPU:%1\nMEM:%3")
-                         .arg(cpu)
-                         .arg(mem));
-}
-
-void InformationWidget::UpdateDataAll(const QString &cpu,const QString &mem,const QString &sbytes,const QString &rbytes)
-{
-	m_infoLabel->setText(QString("CPU:%1↑%2/S\nMEM:%3↓%4/S")
-						 .arg(cpu).arg(sbytes)
-						 .arg(mem).arg(rbytes));
-}
-
-void InformationWidget::UpdateDataNetSpeed(const QString &sbytes,const QString &rbytes)
-{
-    m_infoLabel->setText(QString("↑%1/S\n↓%2/S")
-						 .arg(sbytes)
-						 .arg(rbytes));
+    if(dismode==Dock::Efficient)//高效模式
+    {
+        switch (settings.efficient) {
+        case DisplayContentSetting::CPUMEM:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>CPU:%2<br/>MEM:%3</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.cpu)
+                                 .arg(info.mem));
+            break;
+        case DisplayContentSetting::NETSPEED:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>↑%2/S<br/>↓%3/S</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.netup)
+                                 .arg(info.netdwon));
+            break;
+        case DisplayContentSetting::ALL:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>CPU:%2↑%3/S<br/>MEM:%4↓%5/S</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.cpu).arg(info.netup)
+                                 .arg(info.mem).arg(info.netdwon));
+            break;
+        default:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>CPU:%2↑%3/S<br/>MEM:%4↓%5/S</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.cpu).arg(info.netup)
+                                 .arg(info.mem).arg(info.netdwon));
+            break;
+        }
+    }
+    else//时尚模式
+    {
+        switch (settings.fashion) {
+        case DisplayContentSetting::CPUMEM:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>CPU:%2<br/>MEM:%3</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.cpu)
+                                 .arg(info.mem));
+            break;
+        case DisplayContentSetting::NETSPEED:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>↑%2/S<br/>↓%3/S</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.netup)
+                                 .arg(info.netdwon));
+            break;
+        default:
+            m_infoLabel->setText(QString("<p style='line-height:%1%'>↑%2/S<br/>↓%3/S</p>")
+                                 .arg(settings.lineHeight)
+                                 .arg(info.netup)
+                                 .arg(info.netdwon));
+            break;
+        }
+    }
 }

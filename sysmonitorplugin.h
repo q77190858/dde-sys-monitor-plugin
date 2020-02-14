@@ -37,15 +37,15 @@ public:
 	const QString toHumanRead(unsigned long l,const char *unit,int digit);
 
     //自定义读写配置函数
-    void readConfig(DisplayContentSetting *efficient,DisplayContentSetting *fashion);
-    void writeConfig(DisplayContentSetting efficient,DisplayContentSetting fashion);
+    void readConfig(Settings *settings);
+    void writeConfig(Settings *settings);
 private slots:
     // 用于更新数据的槽函数
     void refreshInfo();
 private:
     //CPU工作时间除以总时间,内存百分比,交换区百分比
     int cpuPercent,memPercent,swapPercent;
-	QString strcpu,strmem,strswap;
+    QString strswap;
     // 获取cpu总时间,获取cpu工作时间
     unsigned long long totaltime,worktime;
 	//保存上一次结果
@@ -61,15 +61,15 @@ private:
 	unsigned long totalmem,availablemem,tmp,totalswap,freeswap;
 	//接收字节数，发送字节数
 	unsigned long rbytes,sbytes,oldrbytes,oldsbytes,tmpr,tmps;
-	char devname[1024];
-	QString s,r;
+    char devname[1024];
 	// 字体
 	QFont font;
 	//显示模式
 	Dock::DisplayMode dismode;
-    //高效模式和时尚模式显示内容设置
-    DisplayContentSetting efficient;
-    DisplayContentSetting fashion;
+    //设置结构体
+    Settings settings;
+    //传递给widget的信息结构体
+    Info info;
 
 private:
     // 处理时间间隔的计时器

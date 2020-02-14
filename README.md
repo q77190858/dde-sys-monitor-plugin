@@ -44,6 +44,8 @@ sudo apt install qtbase5-dev-tools
 sudo apt install libdtkwidget-dev
 #使用qtcreator集成环境可以直接设计ui界面，目前qt版本是5.7.1
 sudo apt install qtcreator
+#使用qtcreator打开cmake工程要先安装cmake
+sudo apt install cmake
 ```
 
 有问题欢迎回帖反馈！开发的心得体会参见我的博客
@@ -58,3 +60,5 @@ sudo apt install qtcreator
 20190830 03:14更新：缩减1个字符宽度，现在最低单位为KB，不显示B
 
 20191211 10:09更新：导入项目到qtcreator，添加设置功能，可设置显示内容
+
+20200214 21:09更新：针对高分屏dpi优化；可设置显示行距；使用系统函数保存设置，更新后单击小气泡无法弹出，原因不明

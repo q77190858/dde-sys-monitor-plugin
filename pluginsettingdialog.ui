@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>279</width>
-    <height>324</height>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,13 +19,13 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="5,5,1,1">
    <item>
     <widget class="QGroupBox" name="displayContentSettingGroupBox">
      <property name="title">
       <string>高效模式显示内容设置</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>31</x>
@@ -52,7 +52,7 @@
        <item>
         <widget class="QRadioButton" name="showAllRadioButton">
          <property name="text">
-          <string>显示CPU、内存和网速</string>
+          <string>显示CP&amp;U、内存和网速</string>
          </property>
         </widget>
        </item>
@@ -65,7 +65,7 @@
      <property name="title">
       <string>时尚模式显示内容设置</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>32</x>
@@ -94,6 +94,55 @@
     </widget>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>行高：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="lineHeightSpinBox">
+       <property name="buttonSymbols">
+        <enum>QAbstractSpinBox::UpDownArrows</enum>
+       </property>
+       <property name="suffix">
+        <string>%</string>
+       </property>
+       <property name="minimum">
+        <number>50</number>
+       </property>
+       <property name="maximum">
+        <number>200</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>100</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -104,6 +153,12 @@
     </widget>
    </item>
   </layout>
+  <zorder>fashionDisplayContentSettingGroupBox</zorder>
+  <zorder>displayContentSettingGroupBox</zorder>
+  <zorder>buttonBox</zorder>
+  <zorder>lineHeightSpinBox</zorder>
+  <zorder>label</zorder>
+  <zorder>horizontalSpacer</zorder>
  </widget>
  <resources/>
  <connections>
