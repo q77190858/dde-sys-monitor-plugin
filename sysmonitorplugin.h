@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <dde-dock/pluginsiteminterface.h>
 #include "pluginsettingdialog.h"
+#include <QDebug>
 
 class SysMonitorPlugin : public QObject, PluginsItemInterface
 {
@@ -42,6 +43,8 @@ public:
 private slots:
     // 用于更新数据的槽函数
     void refreshInfo();
+    //更新tipsWidget气泡数据的函数
+    void m_tipsWidget_update();
 private:
     //CPU工作时间除以总时间,内存百分比,交换区百分比
     int cpuPercent,memPercent,swapPercent;
@@ -62,6 +65,8 @@ private:
 	//接收字节数，发送字节数
 	unsigned long rbytes,sbytes,oldrbytes,oldsbytes,tmpr,tmps;
     char devname[1024];
+    //电池功率瓦特，根据电池充放电状态设置正负
+    float battery_watts;
 	// 字体
 	QFont font;
 	//显示模式

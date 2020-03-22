@@ -75,12 +75,25 @@ void SysMonitorPlugin::refreshInfo()
 	tmps=(oldsbytes==0?0:sbytes-oldsbytes);
 	oldrbytes=rbytes;
 	oldsbytes=sbytes;
-	
+
     info.netup=toHumanRead(tmps,"B",0);
     info.netdwon=toHumanRead(tmpr,"B",0);
+
+    //获得电池信息
+    fp=NULL;
+    //使用popen执行shell命令并返回一个流来读取电池信息
+    fp=popen("upower -i $(upower -e | grep 'BAT') | grep -E 'energy-rate|state'","r");
+    if(fp==NULL){perror("popen");return;}
+    battery_watts=0;
+    fscanf(fp,"    state:               %s",buffer);
+    fscanf(fp,"    energy-rate:         %f W",&battery_watts);
+    if(strcmp("discharging",buffer)==0){battery_watts=0-battery_watts;}
+    pclose(fp);
 	
     // 更新内容
     m_pluginWidget->UpdateData(info,dismode,settings);
+    if(m_tipsWidget->isVisible())m_tipsWidget_update();
+    //qDebug()<<"m_tipsWidget->isVisible():"<<QString::number(m_tipsWidget->isVisible());
 }
 
 const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int digit)
@@ -165,17 +178,23 @@ QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
     return m_pluginWidget;
 }
 
+void SysMonitorPlugin::m_tipsWidget_update()
+{
+    // 设置/刷新 tips 中的信息
+    m_tipsWidget->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S<br/>BATTERY:%11W</p>")
+.arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
+.arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
+.arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
+.arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
+.arg(QString::number((double)battery_watts,'f',2))
+);
+}
+
 QWidget *SysMonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
-	
-    // 设置/刷新 tips 中的信息
-    m_tipsWidget->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S</p>")
-                            .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
-                            .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
-                            .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
-                            .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
-                            );
+    //更新气泡数据
+    m_tipsWidget_update();
     return m_tipsWidget;
 }
 
