@@ -79,26 +79,40 @@ void SysMonitorPlugin::refreshInfo()
     info.netup=toHumanRead(tmps,"B",0);
     info.netdwon=toHumanRead(tmpr,"B",0);
 
-    //获得电池信息
+    //获得电池信息 "/current_now" "/voltage_now"
     fp=NULL;
-    //使用popen执行shell命令并返回一个流来读取电池信息
-    fp=popen("upower -i $(upower -e | grep 'BAT') | grep -E 'energy-rate|state'","r");
-    if(fp==NULL){perror("popen");return;}
-    battery_watts=0;
-    fscanf(fp,"    state:               %s",buffer);
-    fscanf(fp,"    energy-rate:         %f W",&battery_watts);
-    if(strcmp("discharging",buffer)==0){battery_watts=0-battery_watts;}
-    pclose(fp);
+    if(strlen(bat_current_path)!=0)
+    {
+        fp=fopen(bat_current_path,"r");
+        if(fp==NULL){perror("Could not open bat file");return;}
+        fscanf(fp,"%lu\n",&bat_current_now);
+        fclose(fp);
+    }
+    fp=NULL;
+    if(strlen(bat_voltage_path)!=0)
+    {
+        fp=fopen(bat_voltage_path,"r");
+        if(fp==NULL){perror("Could not open bat file");return;}
+        fscanf(fp,"%lu\n",&bat_voltage_now);
+        fclose(fp);
+    }
+    battery_watts=(bat_current_now/1000000.0)*(bat_voltage_now/1000000.0);
 	
     // 更新内容
-    m_pluginWidget->UpdateData(info,dismode,settings);
-    if(m_tipsWidget->isVisible())m_tipsWidget_update();
+    m_mainWidget->UpdateData(info,dismode,settings);
+    if(m_tipsWidget->isVisible())m_Widget_update(m_tipsWidget);
+    if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
+    m_proxyInter->itemUpdate(this,pluginName());
+    //qDebug()<<"m_infoLabel->height():"<<m_pluginWidget->m_infoLabel->height();
+    //qDebug()<<"m_pluginWidget->height():"<<m_pluginWidget->height();
+    //m_pluginWidget->m_infoLabel->setMinimumHeight(29);
+    //qDebug()<<"m_appletWidget->isVisible():"<<QString::number(m_appletWidget->isVisible());
     //qDebug()<<"m_tipsWidget->isVisible():"<<QString::number(m_tipsWidget->isVisible());
 }
 
 const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int digit)
 {
-	int count;
+    int count=0;
 	QString str;
 	double f=(double)l;
 	if(!strcmp(unit,"B"))count=0;
@@ -111,9 +125,9 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 	
 	if(count==0){count++;f=f/1024;}
 
-    if(f<0.1)str="&nbsp;&nbsp;0";
+    if(f<0.1)str="  0";
 	else if(f<=9)str=QString::number(f,'f',1);
-    else if(f<=99)str="&nbsp;"+QString::number(f,'f',0);
+    else if(f<=99)str=" "+QString::number(f,'f',0);
 	else str=QString::number(f,'f',0);
 	
 	if(count==0)str+="B";
@@ -131,7 +145,9 @@ void SysMonitorPlugin::readConfig(Settings *settings)
                          getValue(this,"efficient",DisplayContentSetting::ALL).toInt());
     settings->fashion=DisplayContentSetting(m_proxyInter->
                        getValue(this,"fashion",DisplayContentSetting::NETSPEED).toInt());
-    settings->lineHeight=m_proxyInter->getValue(this,"lineHeight",100).toInt();
+    settings->lineHeight=m_proxyInter->getValue(this,"lineHeight",15).toInt();
+    settings->fontSize=m_proxyInter->getValue(this,"fontSize",9).toInt();
+    settings->fontColor=m_proxyInter->getValue(this,"fontColor",1).toInt();
 }
 //写配置信息
 void SysMonitorPlugin::writeConfig(Settings *settings)
@@ -139,6 +155,8 @@ void SysMonitorPlugin::writeConfig(Settings *settings)
     m_proxyInter->saveValue(this,"efficient",settings->efficient);
     m_proxyInter->saveValue(this,"fashion",settings->fashion);
     m_proxyInter->saveValue(this,"lineHeight",settings->lineHeight);
+    m_proxyInter->saveValue(this,"fontSize",settings->fontSize);
+    m_proxyInter->saveValue(this,"fontColor",settings->fontColor);
 }
 
 const QString SysMonitorPlugin::pluginDisplayName() const
@@ -155,7 +173,7 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_pluginWidget = new InformationWidget;
+    m_mainWidget = new MainWidget;
     m_tipsWidget = new QLabel;
     m_appletWidget = new QLabel;
 	font.setFamily("Noto Mono");
@@ -169,24 +187,45 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
     }
+
+    //获得电池信息文件路径
+    QDir dir("/sys/class/power_supply");
+    if(dir.exists())
+    {
+        //查看路径中BAT开头的文件夹
+        QStringList filters;
+        filters<<QString("BAT*");
+        dir.setFilter(QDir::Dirs); //设置类型过滤器，只为文件夹格式
+        dir.setNameFilters(filters);  //设置文件名称过滤器，只为filters格式
+        if(dir.count()>0)
+        {
+            has_battery=true;
+            strcpy(bat_current_path, (dir.entryInfoList().at(0).filePath()+"/current_now").toLatin1().data());
+            strcpy(bat_voltage_path, (dir.entryInfoList().at(0).filePath()+"/voltage_now").toLatin1().data());
+        }
+        else {
+            has_battery=false;
+        }
+    }
+
 }
 
 QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_pluginWidget;
+    return m_mainWidget;
 }
 
-void SysMonitorPlugin::m_tipsWidget_update()
+void SysMonitorPlugin::m_Widget_update(QLabel* label)
 {
     // 设置/刷新 tips 中的信息
-    m_tipsWidget->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S<br/>BATTERY:%11W</p>")
+    label->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S<br/>BATTERY:%11W</p>")
 .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
 .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
 .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
 .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
-.arg(QString::number((double)battery_watts,'f',2))
+.arg(has_battery? QString::number(battery_watts,'f',2):"NO")
 );
 }
 
@@ -194,20 +233,14 @@ QWidget *SysMonitorPlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
     //更新气泡数据
-    m_tipsWidget_update();
+    m_Widget_update(m_tipsWidget);
     return m_tipsWidget;
 }
 
 QWidget *SysMonitorPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
-
-    m_appletWidget->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S</p>")
-                            .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
-                            .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
-                            .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
-                            .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
-                            );
+    m_Widget_update(m_appletWidget);
     return m_appletWidget;
 }
 

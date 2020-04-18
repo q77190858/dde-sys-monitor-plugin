@@ -15,6 +15,8 @@ struct Settings//设置结构体
     DisplayContentSetting efficient;
     DisplayContentSetting fashion;
     int lineHeight;
+    int fontSize;
+    int fontColor;
 };
 
 namespace Ui {

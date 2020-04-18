@@ -1,7 +1,7 @@
 #ifndef HOMEMONITORPLUGIN_H
 #define HOMEMONITORPLUGIN_H
 
-#include "informationwidget.h"
+#include "mainwidget.h"
 #include <QObject>
 #include <QTimer>
 #include <QFile>
@@ -44,7 +44,7 @@ private slots:
     // 用于更新数据的槽函数
     void refreshInfo();
     //更新tipsWidget气泡数据的函数
-    void m_tipsWidget_update();
+    void m_Widget_update(QLabel *);
 private:
     //CPU工作时间除以总时间,内存百分比,交换区百分比
     int cpuPercent,memPercent,swapPercent;
@@ -65,8 +65,14 @@ private:
 	//接收字节数，发送字节数
 	unsigned long rbytes,sbytes,oldrbytes,oldsbytes,tmpr,tmps;
     char devname[1024];
-    //电池功率瓦特，根据电池充放电状态设置正负
-    float battery_watts;
+    //是否有电池
+    bool has_battery;
+    //电池信息文件路径
+    char bat_current_path[100];
+    char bat_voltage_path[100];
+    //电池功率瓦特，等于当前电流乘以当前电压
+    unsigned long bat_current_now,bat_voltage_now;
+    double battery_watts;
 	// 字体
 	QFont font;
 	//显示模式
@@ -79,7 +85,7 @@ private:
 private:
     // 处理时间间隔的计时器
     QTimer *m_refreshTimer;
-    InformationWidget *m_pluginWidget;
+    MainWidget *m_mainWidget;
     QLabel *m_tipsWidget;
     QLabel *m_appletWidget;
 };
