@@ -7,12 +7,9 @@
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::MainWidget),
+    //ui(new Ui::MainWidget),
     m_infoLabel1(new QLabel),m_infoLabel2(new QLabel)
 {
-//    ui->m_infoLabel->setStyleSheet("QLabel {"
-//                               "color: #000;"
-//                               "}");
     m_infoLabel1->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
     m_infoLabel2->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
     font.setFamily("Noto Mono");
@@ -30,12 +27,14 @@ MainWidget::MainWidget(QWidget *parent) :
     centralLayout->setMargin(0);
 
     setLayout(centralLayout);
-    ui->setupUi(this);
+    //ui->setupUi(this);
 }
 
 MainWidget::~MainWidget()
 {
-    delete ui;
+    //delete ui;
+    delete m_infoLabel1;
+    delete m_infoLabel2;
 }
 
 void MainWidget::UpdateData(const Info &info, Dock::DisplayMode dismode, const Settings &settings)

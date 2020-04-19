@@ -1,43 +1,63 @@
 # dde-sys-monitor-plugin
-## deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使用率、上传下载总量和实时网速
-### 参考了https://github.com/sonichy/CMDU_DDE_DOCK
-### 感谢大神@sonichy
+
+deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使用率、上传下载总量和实时网速
+
+# 参考项目
+
+[CMDU_DDE_DOCK](https://github.com/sonichy/CMDU_DDE_DOCK)
+
+感谢大神@sonichy
+
+# 图片展示
 
 ![alt](image/高效模式全显示.png)  ![alt](image/高效模式只显示CPU内存.jpeg)  ![alt](image/高效模式只显示网速.jpeg)
 
-上三图分别是高效模式下：
+## 上三图分别是高效模式下
+
 1. 全显示
+
 2. 只显示CPU内存
+
 3. 只显示网速
 
 ![alt](image/时尚模式只显示CPU内存.jpeg)  ![alt](image/时尚模式只显示网速.jpeg)
 
-上两图分别是时尚模式下：
+## 上两图分别是时尚模式下
+
 1. 只显示CPU内存
+
 2. 只显示网速
 
 ![alt](image/高效模式右键菜单.jpeg)  ![alt](image/设置显示内容.png)
 
-右键菜单中有设置选项，可以设置各个模式下的显示内容
+## 右键菜单中有设置选项，可以设置各个模式下的显示内容
 
-# 编译好的so [下载](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
-deepin15.11测试可用
+# 下载编译好的so
 
-# 直接下载安装：
-```
+[libsys_monitor.so](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
+
+deepin20 beta测试可用
+
+# 安装命令：
+
+```bash
 sudo cp libsys_monitor.so /usr/lib/dde-dock/plugins/
 pkill dde-dock
 dde-dock
 ```
 
-# 编译加安装：
-`./build.sh`
+# 手动编译加安装：
+
+```bash
+./build.sh
+```
 
 编译教程见[官方开发文档](https://github.com/linuxdeepin/dde-dock/blob/master/plugins/plugin-guide/plugins-developer-guide.md
 )
 
 编译另外还需要安装如下依赖（吐槽一下官方的开发文档讲的环境配置不全）：
-```
+
+```bash
 sudo apt install dde-dock-dev 
 sudo apt install qtbase5-dev-tools
 sudo apt install libdtkwidget-dev
@@ -69,3 +89,5 @@ sudo apt install cmake
 20200418 13：52更新：编译v20beta版本，使用读取sys文件获得电池功率，添加字体大小颜色设置，修复单击无法弹出小气泡问题，目前存在被dock遮挡住的问题，只能通过鼠标拉动设置dock高度或者宽度来解决
 
 ![alt](image/v20beta.png)
+
+20200420 00:01更新：修复插件界面显示为空白的UI问题

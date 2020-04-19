@@ -220,12 +220,16 @@ QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
 void SysMonitorPlugin::m_Widget_update(QLabel* label)
 {
     // 设置/刷新 tips 中的信息
-    label->setText(QString("<p>MEM: %1/%2=%3<br/>SWAP:%4/%5=%6<br/>UP:&nbsp;&nbsp;%7 %8/S<br/>DOWN:%9 %10/S<br/>BATTERY:%11W</p>")
+    label->setText(QString("MEM: %1/%2=%3\n"
+                           "SWAP:%4/%5=%6\n"
+                           "UP:  %7 %8/S\n"
+                           "DOWN:%9 %10/S\n"
+                           "BATTERY:%11")
 .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
 .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
 .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
 .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
-.arg(has_battery? QString::number(battery_watts,'f',2):"NO")
+.arg(has_battery? QString::number(battery_watts,'f',2)+"W":"NO")
 );
 }
 
