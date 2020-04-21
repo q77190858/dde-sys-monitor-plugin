@@ -10,8 +10,8 @@ MainWidget::MainWidget(QWidget *parent) :
     //ui(new Ui::MainWidget),
     m_infoLabel1(new QLabel),m_infoLabel2(new QLabel)
 {
-    m_infoLabel1->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
-    m_infoLabel2->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
+    m_infoLabel1->setAlignment(Qt::AlignCenter);
+    m_infoLabel2->setAlignment(Qt::AlignCenter);
     font.setFamily("Noto Mono");
     // 获取dpi，一般默认都是96，根据dpi进行字体的缩放，直接设置pointsize无法解决hidpi问题
     dpi = QApplication::primaryScreen()->logicalDotsPerInch();

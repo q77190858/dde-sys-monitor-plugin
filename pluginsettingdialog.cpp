@@ -16,6 +16,7 @@ pluginSettingDialog::pluginSettingDialog(Settings *settings,QWidget *parent) :
     ui->lineHeightSpinBox->setValue(settings->lineHeight);
     ui->fontSizeSpinBox->setValue(settings->fontSize);
     ui->fontColorComboBox->setCurrentIndex(settings->fontColor);
+    ui->batInfoComboBox->setCurrentIndex(settings->batInfo);
 }
 
 pluginSettingDialog::~pluginSettingDialog()
@@ -35,4 +36,5 @@ void pluginSettingDialog::getDisplayContentSetting(Settings *settings)
     settings->lineHeight=ui->lineHeightSpinBox->value();
     settings->fontSize=ui->fontSizeSpinBox->value();
     settings->fontColor=ui->fontColorComboBox->currentIndex();
+    settings->batInfo=ui->batInfoComboBox->currentIndex();
 }

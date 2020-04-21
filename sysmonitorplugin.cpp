@@ -80,29 +80,31 @@ void SysMonitorPlugin::refreshInfo()
     info.netdwon=toHumanRead(tmpr,"B",0);
 
     //获得电池信息 "/current_now" "/voltage_now"
-    fp=NULL;
-    if(strlen(bat_current_path)!=0)
+    if(settings.batInfo!=0)
     {
-        fp=fopen(bat_current_path,"r");
-        if(fp==NULL){perror("Could not open bat file");return;}
-        fscanf(fp,"%lu\n",&bat_current_now);
-        fclose(fp);
+        fp=NULL;
+        if(strlen(bat_current_path)!=0)
+        {
+            fp=fopen(bat_current_path,"r");
+            if(fp==NULL){perror("Could not open bat file");}
+            else fscanf(fp,"%lu\n",&bat_current_now);
+            fclose(fp);
+        }
+        fp=NULL;
+        if(strlen(bat_voltage_path)!=0)
+        {
+            fp=fopen(bat_voltage_path,"r");
+            if(fp==NULL){perror("Could not open bat file");}
+            else fscanf(fp,"%lu\n",&bat_voltage_now);
+            fclose(fp);
+        }
+        battery_watts=(bat_current_now/1000000.0)*(bat_voltage_now/1000000.0);
     }
-    fp=NULL;
-    if(strlen(bat_voltage_path)!=0)
-    {
-        fp=fopen(bat_voltage_path,"r");
-        if(fp==NULL){perror("Could not open bat file");return;}
-        fscanf(fp,"%lu\n",&bat_voltage_now);
-        fclose(fp);
-    }
-    battery_watts=(bat_current_now/1000000.0)*(bat_voltage_now/1000000.0);
 	
     // 更新内容
     m_mainWidget->UpdateData(info,dismode,settings);
     if(m_tipsWidget->isVisible())m_Widget_update(m_tipsWidget);
     if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
-    m_proxyInter->itemUpdate(this,pluginName());
     //qDebug()<<"m_infoLabel->height():"<<m_pluginWidget->m_infoLabel->height();
     //qDebug()<<"m_pluginWidget->height():"<<m_pluginWidget->height();
     //m_pluginWidget->m_infoLabel->setMinimumHeight(29);
@@ -148,7 +150,9 @@ void SysMonitorPlugin::readConfig(Settings *settings)
     settings->lineHeight=m_proxyInter->getValue(this,"lineHeight",15).toInt();
     settings->fontSize=m_proxyInter->getValue(this,"fontSize",9).toInt();
     settings->fontColor=m_proxyInter->getValue(this,"fontColor",1).toInt();
+    settings->batInfo=m_proxyInter->getValue(this,"batInfo",1).toInt();
 }
+
 //写配置信息
 void SysMonitorPlugin::writeConfig(Settings *settings)
 {
@@ -157,6 +161,7 @@ void SysMonitorPlugin::writeConfig(Settings *settings)
     m_proxyInter->saveValue(this,"lineHeight",settings->lineHeight);
     m_proxyInter->saveValue(this,"fontSize",settings->fontSize);
     m_proxyInter->saveValue(this,"fontColor",settings->fontColor);
+    m_proxyInter->saveValue(this,"batInfo",settings->batInfo);
 }
 
 const QString SysMonitorPlugin::pluginDisplayName() const
@@ -220,17 +225,20 @@ QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
 void SysMonitorPlugin::m_Widget_update(QLabel* label)
 {
     // 设置/刷新 tips 中的信息
-    label->setText(QString("MEM: %1/%2=%3\n"
+    QString baseInfo= QString("MEM: %1/%2=%3\n"
                            "SWAP:%4/%5=%6\n"
                            "UP:  %7 %8/S\n"
-                           "DOWN:%9 %10/S\n"
-                           "BATTERY:%11")
+                           "DOWN:%9 %10/S")
 .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
 .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
 .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
-.arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1))
-.arg(has_battery? QString::number(battery_watts,'f',2)+"W":"NO")
-);
+.arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1));
+
+    QString batInfo("");
+    if(has_battery&&settings.batInfo)
+        batInfo= QString("\nBAT: %1W").arg(QString::number(battery_watts,'f',2));
+
+    label->setText(baseInfo+batInfo);
 }
 
 QWidget *SysMonitorPlugin::itemTipsWidget(const QString &itemKey)

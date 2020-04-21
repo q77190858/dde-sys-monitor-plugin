@@ -17,6 +17,7 @@ struct Settings//设置结构体
     int lineHeight;
     int fontSize;
     int fontColor;
+    int batInfo;
 };
 
 namespace Ui {
