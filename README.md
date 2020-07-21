@@ -27,14 +27,22 @@ deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使
 deepin20 beta测试可用
 
 ```bash
-wget https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/
+wget https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && pkill dde-dock
+```
+
+码云下载：
+
+```bash
+wget https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && pkill dde-dock
 ```
 
 ### 下载地址
 
 deepin20 beta测试可用
 
-[libsys_monitor.so](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
+github：[libsys_monitor.so](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
+
+码云：[libsys_monitor.so](https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 
 ### 安装命令
 
