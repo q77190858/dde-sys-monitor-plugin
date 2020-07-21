@@ -5,16 +5,16 @@
 #include <QLabel>
 #include <QTimer>
 #include <QObject>
-#include <QVBoxLayout>
+#include <QBoxLayout>
+#include <QRgb>
+#include <QDebug>
+#include <QScreen>
+#include <QApplication>
 #include <dde-dock/pluginsiteminterface.h>
-#include "pluginsettingdialog.h"
+#include "streamchart.h"
+#include "type.h"
 
-struct Info{
-    QString cpu;
-    QString mem;
-    QString netup;
-    QString netdwon;
-};
+extern struct SettingItem settingItems[];
 
 namespace Ui {
 class MainWidget;
@@ -25,21 +25,30 @@ class MainWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit MainWidget(QWidget *parent = nullptr);
+    explicit MainWidget(Settings&,Dock::Position);
     ~MainWidget();
-    void UpdateData(const Info& info,Dock::DisplayMode dismode,const Settings& settings);
+    void UpdateData(const Info& info,Dock::Position position,const Settings& settings);
 
 public:
     int dpi;
-    QVBoxLayout *centralLayout;
-    // 真正的数据显示在这个 Label 上
-    QLabel *m_infoLabel1;
-    QLabel *m_infoLabel2;
+    QBoxLayout *centralLayout;
+    // 文字模式数据显示在这2个 Label 上
+    QLabel *cpuMemLabel,*netLabel;
+    //显示数据的图表类
+    StreamChart *netChart,*cpuChart,*memChart;
+    struct Data data;
     // 字体
     QFont font;
+    //保存之前的设置
+    Settings oldsettings;
+    //保存之前的位置
+    Dock::Position oldposition;
+
 
 private:
     Ui::MainWidget *ui;
+    void initLabels(void);
+    void initChart(void);
 };
 
 #endif // MAINWIDGET_H

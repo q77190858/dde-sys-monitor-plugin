@@ -1,15 +1,52 @@
 #include "sysmonitorplugin.h"
 
+//设置选项和默认值,静态全局变量
+struct SettingItem SysMonitorPlugin::settingItems[]={
+//全局设置选项
+{"chartModeCheckBox",0},//图表模式开关
+{"batInfoComboBox",0},//气泡电池信息开关
+{"updateIntervalSpinBox",1000},//更新间隔ms
+
+//文字模式设置选项
+{"displayContentComboBox",DisplayContentSetting::ALL},
+{"wordSpacingSpinBox",4},
+{"heightSpinBox",28},
+{"fontSizeSpinBox",9},
+{"fontColorComboBox",0},
+
+//图表模式设置选项
+//默认三个图表都是打开的
+{"netChartCheckBox",1},{"cpuChartCheckBox",1},{"memChartCheckBox",1},
+{"chartSpacingSpinBox",1},
+//net图表设置
+{"netUpTopSpinBox",500},//上传
+{"netUpWidget",QColor(0,78,239,200)},
+{"netDownTopSpinBox",500},//下载
+{"netDownWidget",QColor(225,67,0,200)},
+{"netBorderRoundSpinBox",30},//边框
+{"netBorderWidget",QColor(255,255,255,0)},
+{"netBackgroundWidget",QColor(0,0,0,128)},//背景
+{"netWidthSpinBox",40},{"netHeightSpinBox",28},//宽度高度
+//cpu图表设置
+{"cpuWorkWidget",QColor(250,74,74,255)},
+{"cpuBorderRoundSpinBox",30},//边框
+{"cpuBorderWidget",QColor(255,255,255,0)},
+{"cpuBackgroundWidget",QColor(0,0,0,128)},//背景
+{"cpuWidthSpinBox",40},{"cpuHeightSpinBox",28},//宽度高度
+//mem图表设置
+{"memUsedWidget",QColor(21,199,195,255)},
+{"memBorderRoundSpinBox",30},//边框
+{"memBorderWidget",QColor(255,255,255,0)},
+{"memBackgroundWidget",QColor(0,0,0,128)},//背景
+{"memWidthSpinBox",40},{"memHeightSpinBox",28}//宽度高度
+                                                                 };
+
 SysMonitorPlugin::SysMonitorPlugin(QObject *parent)
     : QObject(parent)
 	,m_refreshTimer(new QTimer(this))
 {
 	oldrbytes=oldsbytes=0;
-	// 设置 Timer 超时为 1s，即每 1s 更新一次控件上的数据，并启动这个定时器
-    m_refreshTimer->start(1000);
-	
-	// 连接 Timer 超时的信号到更新数据的槽上
-    connect(m_refreshTimer, &QTimer::timeout, this, &SysMonitorPlugin::refreshInfo);
+    oldworktime=oldtotaltime=0;
 }
 
 void SysMonitorPlugin::refreshInfo()
@@ -22,15 +59,17 @@ void SysMonitorPlugin::refreshInfo()
     char* ret = fgets(buffer, sizeof(buffer) - 1, fp);
     if (ret == NULL) {perror("Could not read stat file");fclose(fp);return;}
     fclose(fp);
-    sscanf(buffer,"cpu  %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu",&user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guestnice);
+    sscanf(buffer,"cpu  %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu %16llu",
+                  &user, &nice, &system, &idle, &iowait, &irq, &softirq, &steal, &guest, &guestnice);
     worktime = user + nice + system;
     totaltime = user + nice + system + idle + iowait + irq + softirq + steal;
     // 得到百分比
     cpuPercent = qRound((worktime-oldworktime)*100.0/(totaltime-oldtotaltime));
     oldtotaltime=totaltime;
     oldworktime=worktime;
-    if(cpuPercent<=9)info.cpu=QString(" %1\%").arg(cpuPercent);
-    else info.cpu=QString("%1\%").arg(cpuPercent);
+    info.cpu=cpuPercent;
+    if(cpuPercent<=9)info.scpu=QString(" %1\%").arg(cpuPercent);
+    else info.scpu=QString("%1\%").arg(cpuPercent);
 	
 	//获得内存信息
     fp=fopen("/proc/meminfo","r");
@@ -47,8 +86,9 @@ void SysMonitorPlugin::refreshInfo()
 	}while(strcmp(devname,"SwapFree:"));
     fclose(fp);
 	memPercent = qRound((totalmem - availablemem) * 100.0 / totalmem);
-    if(memPercent<=9)info.mem=QString(" %1\%").arg(memPercent);
-    else info.mem=QString("%1\%").arg(memPercent);
+    info.mem=memPercent;
+    if(memPercent<=9)info.smem=QString(" %1\%").arg(memPercent);
+    else info.smem=QString("%1\%").arg(memPercent);
 	
     swapPercent = qRound((totalswap - freeswap) * 100.0 / totalswap);
 	if(swapPercent<=9)strswap=QString(" %1\%").arg(swapPercent);
@@ -76,36 +116,33 @@ void SysMonitorPlugin::refreshInfo()
 	oldrbytes=rbytes;
 	oldsbytes=sbytes;
 
-    info.netup=toHumanRead(tmps,"B",0);
-    info.netdwon=toHumanRead(tmpr,"B",0);
+    info.netup=tmps;
+    info.netdown=tmpr;
+    info.snetup=toHumanRead(tmps,"B",0);
+    info.snetdwon=toHumanRead(tmpr,"B",0);
 
-    //获得电池信息 "/current_now" "/voltage_now"
-    if(settings.batInfo!=0)
+    //每10s执行一次，降低cpu开销
+    if(settings.value("batInfoComboBox").toInt()==1&&bat_count==0)
     {
+        //使用upower命令获得电池信息，兼容性最好，deepin默认预装有upower
         fp=NULL;
-        if(strlen(bat_current_path)!=0)
-        {
-            fp=fopen(bat_current_path,"r");
-            if(fp==NULL){perror("Could not open bat file");}
-            else fscanf(fp,"%lu\n",&bat_current_now);
-            fclose(fp);
-        }
-        fp=NULL;
-        if(strlen(bat_voltage_path)!=0)
-        {
-            fp=fopen(bat_voltage_path,"r");
-            if(fp==NULL){perror("Could not open bat file");}
-            else fscanf(fp,"%lu\n",&bat_voltage_now);
-            fclose(fp);
-        }
-        battery_watts=(bat_current_now/1000000.0)*(bat_voltage_now/1000000.0);
+        //使用popen执行shell命令并返回一个流来读取电池信息
+        fp=popen("upower -i $(upower -e | grep 'BAT') | grep -E 'energy-rate'","r");
+        if(fp==NULL){perror("popen");return;}
+        battery_watts=-1.0;
+        fscanf(fp,"    energy-rate:         %lf W",&battery_watts);
+        pclose(fp);
     }
+    //大于等于10秒就归零
+    bat_count*settings.value("updateIntervalSpinBox").toInt()>=10*1000?bat_count=0:bat_count++;
+
 	
     // 更新内容
-    m_mainWidget->UpdateData(info,dismode,settings);
+    m_mainWidget->UpdateData(info,pos,settings);
     if(m_tipsWidget->isVisible())m_Widget_update(m_tipsWidget);
     if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
-    //qDebug()<<"m_infoLabel->height():"<<m_pluginWidget->m_infoLabel->height();
+    //qDebug()<<"m_mainWidget->height():"<<m_mainWidget->height();
+    //qDebug()<<"m_mainWidget->width():"<<m_mainWidget->width();
     //qDebug()<<"m_pluginWidget->height():"<<m_pluginWidget->height();
     //m_pluginWidget->m_infoLabel->setMinimumHeight(29);
     //qDebug()<<"m_appletWidget->isVisible():"<<QString::number(m_appletWidget->isVisible());
@@ -143,25 +180,23 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 //使用系统配置函数读配置信息
 void SysMonitorPlugin::readConfig(Settings *settings)
 {
-    settings->efficient=DisplayContentSetting(m_proxyInter->
-                         getValue(this,"efficient",DisplayContentSetting::ALL).toInt());
-    settings->fashion=DisplayContentSetting(m_proxyInter->
-                       getValue(this,"fashion",DisplayContentSetting::NETSPEED).toInt());
-    settings->lineHeight=m_proxyInter->getValue(this,"lineHeight",15).toInt();
-    settings->fontSize=m_proxyInter->getValue(this,"fontSize",9).toInt();
-    settings->fontColor=m_proxyInter->getValue(this,"fontColor",1).toInt();
-    settings->batInfo=m_proxyInter->getValue(this,"batInfo",1).toInt();
+    for(unsigned long i=0;i<sizeof(settingItems)/sizeof(settingItems[0]);i++)
+    {
+        settings->insert(settingItems[i].name,
+                         m_proxyInter->getValue(this,settingItems[i].name,settingItems[i].value));
+    }
+    //settings->insert("cpuChartCheckBox",1);
 }
 
 //写配置信息
 void SysMonitorPlugin::writeConfig(Settings *settings)
 {
-    m_proxyInter->saveValue(this,"efficient",settings->efficient);
-    m_proxyInter->saveValue(this,"fashion",settings->fashion);
-    m_proxyInter->saveValue(this,"lineHeight",settings->lineHeight);
-    m_proxyInter->saveValue(this,"fontSize",settings->fontSize);
-    m_proxyInter->saveValue(this,"fontColor",settings->fontColor);
-    m_proxyInter->saveValue(this,"batInfo",settings->batInfo);
+    QMapIterator<QString,QVariant> i(*settings);
+    while(i.hasNext())
+    {
+        i.next();
+        m_proxyInter->saveValue(this,i.key(),i.value());
+    }
 }
 
 const QString SysMonitorPlugin::pluginDisplayName() const
@@ -178,40 +213,30 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_mainWidget = new MainWidget;
+    //读取显示配置
+    readConfig(&settings);
+
+    m_mainWidget = new MainWidget(settings,position());
     m_tipsWidget = new QLabel;
     m_appletWidget = new QLabel;
 	font.setFamily("Noto Mono");
 	m_tipsWidget->setFont(font);
     m_appletWidget->setFont(font);
 	dismode=displayMode();
-    //读取显示配置
-    readConfig(&settings);
+    pos=position();
+    battery_watts=-1.0;
+    bat_count=0;
 
     // 如果插件没有被禁用则在初始化插件时才添加主控件到面板上
     if (!pluginIsDisable()) {
         m_proxyInter->itemAdded(this, pluginName());
     }
 
-    //获得电池信息文件路径
-    QDir dir("/sys/class/power_supply");
-    if(dir.exists())
-    {
-        //查看路径中BAT开头的文件夹
-        QStringList filters;
-        filters<<QString("BAT*");
-        dir.setFilter(QDir::Dirs); //设置类型过滤器，只为文件夹格式
-        dir.setNameFilters(filters);  //设置文件名称过滤器，只为filters格式
-        if(dir.count()>0)
-        {
-            has_battery=true;
-            strcpy(bat_current_path, (dir.entryInfoList().at(0).filePath()+"/current_now").toLatin1().data());
-            strcpy(bat_voltage_path, (dir.entryInfoList().at(0).filePath()+"/voltage_now").toLatin1().data());
-        }
-        else {
-            has_battery=false;
-        }
-    }
+    // 设置 Timer 超时为 updateIntervalSpinBox 中的ms，即每次更新一次控件上的数据，并启动这个定时器
+    m_refreshTimer->start(settings.value("updateIntervalSpinBox").toInt());
+
+    // 连接 Timer 超时的信号到更新数据的槽上
+    connect(m_refreshTimer, &QTimer::timeout, this, &SysMonitorPlugin::refreshInfo);
 
 }
 
@@ -225,17 +250,19 @@ QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
 void SysMonitorPlugin::m_Widget_update(QLabel* label)
 {
     // 设置/刷新 tips 中的信息
-    QString baseInfo= QString("MEM: %1/%2=%3\n"
-                           "SWAP:%4/%5=%6\n"
-                           "UP:  %7 %8/S\n"
-                           "DOWN:%9 %10/S")
+    QString baseInfo= QString("CPU:  %1\n"
+                              "MEM: %2/%3=%4\n"
+                              "SWAP:%5/%6=%7\n"
+                              "UP:  %8 %9/S\n"
+                              "DOWN:%10 %11/S")
+.arg(info.scpu)
 .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
 .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
 .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
 .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1));
 
     QString batInfo("");
-    if(has_battery&&settings.batInfo)
+    if(battery_watts>=0&&settings.value("batInfoComboBox").toInt())
         batInfo= QString("\nBAT: %1W").arg(QString::number(battery_watts,'f',2));
 
     label->setText(baseInfo+batInfo);
@@ -329,11 +356,17 @@ void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &me
         QProcess::startDetached("deepin-system-monitor");
     }
     else if(menuId == "setting") {
+        int updataInterval=settings.value("updateIntervalSpinBox").toInt();
         pluginSettingDialog setting(&settings);
         if(setting.exec()==QDialog::Accepted)
         {
             setting.getDisplayContentSetting(&settings);
             writeConfig(&settings);
+            if(settings.value("updateIntervalSpinBox").toInt()!=updataInterval)
+            {
+                // 修改更新时间间隔
+                m_refreshTimer->start(settings.value("updateIntervalSpinBox").toInt());
+            }
         }
     }
 }
@@ -342,4 +375,9 @@ void SysMonitorPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
 	Q_UNUSED(displayMode);
 	dismode=displayMode;
+}
+void SysMonitorPlugin::positionChanged(const Dock::Position position)
+{
+    Q_UNUSED(position);
+    pos=position;
 }

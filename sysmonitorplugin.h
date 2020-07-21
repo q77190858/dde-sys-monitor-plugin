@@ -1,14 +1,18 @@
 #ifndef HOMEMONITORPLUGIN_H
 #define HOMEMONITORPLUGIN_H
 
-#include "mainwidget.h"
 #include <QObject>
 #include <QTimer>
 #include <QFile>
 #include <cstdio>
-#include <dde-dock/pluginsiteminterface.h>
-#include "pluginsettingdialog.h"
+#include <QLabel>
 #include <QDebug>
+#include <dde-dock/pluginsiteminterface.h>
+#include "mainwidget.h"
+#include "pluginsettingdialog.h"
+#include "type.h"
+
+extern struct SettingItem settingItems[];
 
 class SysMonitorPlugin : public QObject, PluginsItemInterface
 {
@@ -34,8 +38,11 @@ public:
     const QString itemContextMenu(const QString &itemKey) override;
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked) override;
 	void displayModeChanged(const Dock::DisplayMode displayMode) override;
+    void positionChanged(const Dock::Position position)override;
 
 	const QString toHumanRead(unsigned long l,const char *unit,int digit);
+public:
+    static struct SettingItem settingItems[];//公共的保存默认设置的数组
 
     //自定义读写配置函数
     void readConfig(Settings *settings);
@@ -65,18 +72,16 @@ private:
 	//接收字节数，发送字节数
 	unsigned long rbytes,sbytes,oldrbytes,oldsbytes,tmpr,tmps;
     char devname[1024];
-    //是否有电池
-    bool has_battery;
-    //电池信息文件路径
-    char bat_current_path[100];
-    char bat_voltage_path[100];
-    //电池功率瓦特，等于当前电流乘以当前电压
-    unsigned long bat_current_now,bat_voltage_now;
+    //电池功率瓦特
     double battery_watts;
+    //电池统计计数，每隔这么多次才读取一次
+    int bat_count;
 	// 字体
 	QFont font;
-	//显示模式
+    //dock显示模式:时尚模式 高效模式
 	Dock::DisplayMode dismode;
+    //dock的位置：上下左右
+    Dock::Position pos;
     //设置结构体
     Settings settings;
     //传递给widget的信息结构体

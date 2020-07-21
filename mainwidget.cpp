@@ -1,89 +1,198 @@
 #include "mainwidget.h"
-#include "ui_mainwidget.h"
-#include <QVBoxLayout>
-#include <QDebug>
-#include <QScreen>
-#include <QApplication>
 
-MainWidget::MainWidget(QWidget *parent) :
-    QWidget(parent),
-    //ui(new Ui::MainWidget),
-    m_infoLabel1(new QLabel),m_infoLabel2(new QLabel)
+MainWidget::MainWidget(Settings& settings,Dock::Position position)
 {
-    m_infoLabel1->setAlignment(Qt::AlignCenter);
-    m_infoLabel2->setAlignment(Qt::AlignCenter);
+    centralLayout=NULL;
+    cpuMemLabel=NULL;
+    netLabel=NULL;
+    netChart=NULL;
+    cpuChart=NULL;
+    memChart=NULL;
+    setMinimumSize(5,5);
+    //设置等宽字体
     font.setFamily("Noto Mono");
     // 获取dpi，一般默认都是96，根据dpi进行字体的缩放，直接设置pointsize无法解决hidpi问题
     dpi = QApplication::primaryScreen()->logicalDotsPerInch();
-    int fontsize = 9; // >10在时尚模式下有些显示不全
-    font.setPixelSize((dpi*fontsize)/72);
-    m_infoLabel1->setFont(font);
-    m_infoLabel2->setFont(font);
-
-    centralLayout = new QVBoxLayout;
-    centralLayout->addWidget(m_infoLabel1);
-    centralLayout->addWidget(m_infoLabel2);
-    centralLayout->setSpacing(0);
-    centralLayout->setMargin(0);
-
-    setLayout(centralLayout);
-    //ui->setupUi(this);
+    oldsettings=settings;
+    oldposition=position;
 }
 
 MainWidget::~MainWidget()
 {
-    //delete ui;
-    delete m_infoLabel1;
-    delete m_infoLabel2;
+    if(cpuMemLabel!=NULL){delete cpuMemLabel;cpuMemLabel=NULL;}
+    if(netLabel!=NULL){delete netLabel;netLabel=NULL;}
+    if(netChart!=NULL){delete netChart;netChart=NULL;}
+    if(cpuChart!=NULL){delete cpuChart;cpuChart=NULL;}
+    if(memChart!=NULL){delete memChart;memChart=NULL;}
+    if(centralLayout!=NULL){delete centralLayout;centralLayout=NULL;}
 }
 
-void MainWidget::UpdateData(const Info &info, Dock::DisplayMode dismode, const Settings &settings)
+void MainWidget::UpdateData(const Info &info, Dock::Position position, const Settings &settings)
 {
-    font.setPixelSize((dpi*settings.fontSize)/72);
-    m_infoLabel1->setFont(font);
-    m_infoLabel2->setFont(font);
-    QString style=QString("QLabel {color: %1;}").arg(settings.fontColor==0?"#fff":"#000");
-    m_infoLabel1->setStyleSheet(style);
-    m_infoLabel2->setStyleSheet(style);
-    m_infoLabel1->setFixedHeight(settings.lineHeight);
-    m_infoLabel2->setFixedHeight(settings.lineHeight);
-
-    if(dismode==Dock::Efficient)//高效模式
+    //如果dock位置发生如下变化，则手动重构ui
+    if(
+            ((oldposition==Dock::Top||oldposition==Dock::Bottom)&&(position==Dock::Left||position==Dock::Right))
+            ||
+            ((position==Dock::Top||position==Dock::Bottom)&&(oldposition==Dock::Left||oldposition==Dock::Right))
+      )
     {
-        switch (settings.efficient) {
+        if(cpuMemLabel!=NULL){delete cpuMemLabel;cpuMemLabel=NULL;}
+        if(netLabel!=NULL){delete netLabel;netLabel=NULL;}
+        if(netChart!=NULL){delete netChart;netChart=NULL;}
+        if(cpuChart!=NULL){delete cpuChart;cpuChart=NULL;}
+        if(memChart!=NULL){delete memChart;memChart=NULL;}
+        if(centralLayout!=NULL){delete centralLayout;centralLayout=NULL;}
+    }
+    oldposition=position;
+
+    if(!settings.value("chartModeCheckBox").toInt())//文字模式
+    {
+        //当模式切换的时候
+        if(oldsettings.value("chartModeCheckBox").toInt())
+        {
+            //先清理掉之前的ui
+            //qDebug()<<"模式切换，先清理掉之前的图表ui";
+            if(netChart!=NULL){delete netChart;netChart=NULL;}
+            if(cpuChart!=NULL){delete cpuChart;cpuChart=NULL;}
+            if(memChart!=NULL){delete memChart;memChart=NULL;}
+            if(centralLayout!=NULL){delete centralLayout;centralLayout=NULL;}
+        }
+        //当模式切换或者第一次初始化的时候，需要新建ui
+        if(centralLayout==NULL)
+        {
+            //创建新的ui
+            qDebug()<<"创建新的文字ui";
+            cpuMemLabel=new QLabel();
+            cpuMemLabel->setAlignment(Qt::AlignCenter);
+            netLabel=new QLabel();
+            netLabel->setAlignment(Qt::AlignCenter);
+            centralLayout = new QBoxLayout((position==Dock::Top||position==Dock::Bottom)?
+                                               QBoxLayout::LeftToRight:QBoxLayout::TopToBottom);
+            centralLayout->addWidget(cpuMemLabel);
+            centralLayout->addWidget(netLabel);
+            centralLayout->setMargin(0);
+            setLayout(centralLayout);
+        }
+        centralLayout->setSpacing(settings.value("wordSpacingSpinBox").toInt());
+        font.setPixelSize((dpi*settings.value("fontSizeSpinBox").toInt())/72);
+        cpuMemLabel->setFont(font);
+        netLabel->setFont(font);
+        QString style=QString("QLabel {color: %1;}").arg(settings.value("fontColorComboBox").toInt()==0?"#fff":"#000");
+        cpuMemLabel->setStyleSheet(style);
+        netLabel->setStyleSheet(style);
+        cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+        netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+
+        switch (settings.value("displayContentComboBox").toInt())
+        {
         case DisplayContentSetting::CPUMEM:
-            m_infoLabel1->setText(QString("CPU:%1").arg(info.cpu));
-            m_infoLabel2->setText(QString("MEM:%1").arg(info.mem));
+            cpuMemLabel->setText(QString("CPU:%1\nMEM:%2").arg(info.scpu).arg(info.smem));
+            netLabel->setText("");
             break;
         case DisplayContentSetting::NETSPEED:
-            m_infoLabel1->setText(QString("↑%1/S").arg(info.netup));
-            m_infoLabel2->setText(QString("↓%1/S").arg(info.netdwon));
+            cpuMemLabel->setText("");
+            netLabel->setText(QString("▴%1/s\n▾%2/s").arg(info.snetup).arg(info.snetdwon));
             break;
         case DisplayContentSetting::ALL:
-            m_infoLabel1->setText(QString("CPU:%1↑%2/S").arg(info.cpu).arg(info.netup));
-            m_infoLabel2->setText(QString("MEM:%1↓%2/S").arg(info.mem).arg(info.netdwon));
+            cpuMemLabel->setText(QString("CPU:%1\nMEM:%2").arg(info.scpu).arg(info.smem));
+            netLabel->setText(QString("▴%1/s\n▾%2/s").arg(info.snetup).arg(info.snetdwon));
             break;
         default:
-            m_infoLabel1->setText(QString("CPU:%1↑%2/S").arg(info.cpu).arg(info.netup));
-            m_infoLabel2->setText(QString("MEM:%1↓%2/S").arg(info.mem).arg(info.netdwon));
+            cpuMemLabel->setText(QString("CPU:%1\nMEM:%2").arg(info.scpu).arg(info.smem));
+            netLabel->setText(QString("▴%1/s\n▾%2/s").arg(info.snetup).arg(info.snetdwon));
             break;
         }
     }
-    else//时尚模式
+    else//图表模式
     {
-        switch (settings.fashion) {
-        case DisplayContentSetting::CPUMEM:
-            m_infoLabel1->setText(QString("CPU:%1").arg(info.cpu));
-            m_infoLabel2->setText(QString("MEM:%1").arg(info.mem));
-            break;
-        case DisplayContentSetting::NETSPEED:
-            m_infoLabel1->setText(QString("↑%1/S").arg(info.netup));
-            m_infoLabel2->setText(QString("↓%1/S").arg(info.netdwon));
-            break;
-        default:
-            m_infoLabel1->setText(QString("↑%1/S").arg(info.netup));
-            m_infoLabel2->setText(QString("↓%1/S").arg(info.netdwon));
-            break;
+        //当模式切换的时候，清除文字ui
+        if(!oldsettings.value("chartModeCheckBox").toInt())
+        {
+            delete cpuMemLabel;cpuMemLabel=NULL;
+            delete netLabel;netLabel=NULL;
+            delete centralLayout;centralLayout=NULL;
         }
+        //当图表有变化的时候，清除所有图表ui
+        if(oldsettings.value("cpuChartCheckBox").toInt()+settings.value("cpuChartCheckBox").toInt()==1||
+           oldsettings.value("memChartCheckBox").toInt()+settings.value("memChartCheckBox").toInt()==1||
+           oldsettings.value("netChartCheckBox").toInt()+settings.value("netChartCheckBox").toInt()==1)
+        {
+            if(cpuChart!=NULL){delete cpuChart;cpuChart=NULL;}
+            if(memChart!=NULL){delete memChart;memChart=NULL;}
+            if(netChart!=NULL){delete netChart;netChart=NULL;}
+            delete centralLayout;centralLayout=NULL;
+        }
+        //当模式切换或者第一次初始化的时候，绘制图表ui
+        if(centralLayout==NULL)
+        {
+            centralLayout = new QBoxLayout((position==Dock::Top||position==Dock::Bottom)?
+                                               QBoxLayout::LeftToRight:QBoxLayout::TopToBottom);
+            centralLayout->setMargin(0);
+            setLayout(centralLayout);
+        }
+
+        centralLayout->setSpacing(settings.value("chartSpacingSpinBox").toInt());
+        if(settings.value("cpuChartCheckBox").toInt())
+        {
+            if(cpuChart==NULL)
+            {
+                cpuChart=new StreamChart();
+                centralLayout->addWidget(cpuChart);
+            }
+            data.x=info.cpu;
+            data.y=0;
+            cpuChart->height=settings.value("cpuHeightSpinBox").toInt();
+            cpuChart->width=settings.value("cpuWidthSpinBox").toInt();
+            cpuChart->color1=settings.value("cpuWorkWidget").value<QColor>();
+            cpuChart->color2=QColor(255,255,255,0);
+            cpuChart->borderRound=settings.value("cpuBorderRoundSpinBox").toInt();
+            cpuChart->colorBorder=settings.value("cpuBorderWidget").value<QColor>();
+            cpuChart->colorBackground=settings.value("cpuBackgroundWidget").value<QColor>();
+            cpuChart->spacing=settings.value("chartSpacingSpinBox").toInt();
+
+            cpuChart->updateChart(data);
+        }
+        if(settings.value("memChartCheckBox").toInt())
+        {
+            if(memChart==NULL)
+            {
+                memChart=new StreamChart();
+                centralLayout->addWidget(memChart);
+            }
+            data.x=info.mem;
+            data.y=0;
+            memChart->height=settings.value("memHeightSpinBox").toInt();
+            memChart->width=settings.value("memWidthSpinBox").toInt();
+            memChart->color1=settings.value("memUsedWidget").value<QColor>();
+            memChart->color2=QColor(255,255,255,0);
+            memChart->borderRound=settings.value("memBorderRoundSpinBox").toInt();
+            memChart->colorBorder=settings.value("memBorderWidget").value<QColor>();
+            memChart->colorBackground=settings.value("memBackgroundWidget").value<QColor>();
+            memChart->spacing=settings.value("chartSpacingSpinBox").toInt();
+
+            memChart->updateChart(data);
+        }
+        if(settings.value("netChartCheckBox").toInt())
+        {
+            if(netChart==NULL)
+            {
+                netChart=new StreamChart();
+                centralLayout->addWidget(netChart);
+            }
+            data.x=info.netdown*100/1024/settings.value("netDownTopSpinBox").toInt();
+            data.y=info.netup*100/1024/settings.value("netUpTopSpinBox").toInt();
+            netChart->height=settings.value("netHeightSpinBox").toInt();
+            netChart->width=settings.value("netWidthSpinBox").toInt();
+            netChart->color1=settings.value("netDownWidget").value<QColor>();
+            netChart->color2=settings.value("netUpWidget").value<QColor>();
+            netChart->borderRound=settings.value("netBorderRoundSpinBox").toInt();
+            netChart->colorBorder=settings.value("netBorderWidget").value<QColor>();
+            netChart->colorBackground=settings.value("netBackgroundWidget").value<QColor>();
+            netChart->spacing=settings.value("chartSpacingSpinBox").toInt();
+
+            netChart->updateChart(data);
+        }
+
     }
+    oldsettings=settings;
 }
