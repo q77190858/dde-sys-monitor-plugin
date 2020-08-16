@@ -127,19 +127,24 @@
          </size>
         </property>
         <property name="currentText">
-         <string>黑色</string>
+         <string>浅色</string>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <item>
          <property name="text">
-          <string>白色</string>
+          <string>浅色</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>黑色</string>
+          <string>深色</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>跟随系统</string>
          </property>
         </item>
        </widget>

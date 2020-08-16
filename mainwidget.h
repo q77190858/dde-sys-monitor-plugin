@@ -28,6 +28,7 @@ public:
     explicit MainWidget(Settings&,Dock::Position);
     ~MainWidget();
     void UpdateData(const Info& info,Dock::Position position,const Settings& settings);
+    QString UpdateFontColor(const Settings &settings);
 
 public:
     int dpi;

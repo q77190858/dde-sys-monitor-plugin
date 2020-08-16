@@ -1,4 +1,7 @@
 #include "mainwidget.h"
+#include <DGuiApplicationHelper>
+
+DGUI_USE_NAMESPACE
 
 MainWidget::MainWidget(Settings& settings,Dock::Position position)
 {
@@ -15,6 +18,10 @@ MainWidget::MainWidget(Settings& settings,Dock::Position position)
     dpi = QApplication::primaryScreen()->logicalDotsPerInch();
     oldsettings=settings;
     oldposition=position;
+
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, [ = ] {
+        UpdateFontColor(oldsettings);
+    });
 }
 
 MainWidget::~MainWidget()
@@ -77,11 +84,13 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
         font.setPixelSize((dpi*settings.value("fontSizeSpinBox").toInt())/72);
         cpuMemLabel->setFont(font);
         netLabel->setFont(font);
-        QString style=QString("QLabel {color: %1;}").arg(settings.value("fontColorComboBox").toInt()==0?"#fff":"#000");
-        cpuMemLabel->setStyleSheet(style);
-        netLabel->setStyleSheet(style);
-        cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
-        netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+        UpdateFontColor(settings);
+        /* QString style=QString("QLabel {color: %1;}").arg(settings.value("fontColorComboBox").toInt()==0?"#fff":"#000");
+         * cpuMemLabel->setStyleSheet(style);
+         * netLabel->setStyleSheet(style);
+         * cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+         * netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+         */
 
         switch (settings.value("displayContentComboBox").toInt())
         {
@@ -195,4 +204,29 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
 
     }
     oldsettings=settings;
+}
+
+QString MainWidget::UpdateFontColor(const Settings &settings)
+{
+    QString style;
+    switch(settings.value("fontColorComboBox").toInt())
+    {
+        case 0:
+        style=QString("QLabel {color: %1;}").arg("#fff");
+        break;
+        case 1:
+        style=QString("QLabel {color: %1;}").arg("#000");
+        break;
+        case 2:
+        if(DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType)
+            style=QString("QLabel {color: %1;}").arg("#000");
+        else
+            style=QString("QLabel {color: %1;}").arg("#fff");
+        break;
+    }
+    cpuMemLabel->setStyleSheet(style);
+    netLabel->setStyleSheet(style);
+    cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+    netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+    return style;
 }
