@@ -24,17 +24,25 @@ deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使
 
 ### 一键下载安装
 
-deepin20 beta测试可用
+deepin20 测试可用
+
+github下载：
 
 ```bash
-wget https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/
+wget https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && pkill dde-dock
+```
+
+码云下载：
+
+```bash
+wget https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && pkill dde-dock
 ```
 
 ### 下载地址
 
-deepin20 beta测试可用
+github：[libsys_monitor.so](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 
-[libsys_monitor.so](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
+码云：[libsys_monitor.so](https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 
 ### 安装命令
 
@@ -97,3 +105,5 @@ cd dde-sys-monitor-plugin
 - 20200421 17:01更新：修复电池信息读取失败的问题，加入电池信息开关
 
 - 20200721 20:38更新：重构代码架构，提高可扩展性；参考indicator-multiload加入图表模式；加入很多设置选项；使用upower获取电池功率提高兼容性；适配deepin20dock的上下左右位置
+
+- 20200818 15:50更新：根据 @zty199 的启发加入了跟随系统主题变化文字颜色的功能，仅限于文字模式
