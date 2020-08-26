@@ -111,8 +111,9 @@ void SysMonitorPlugin::refreshInfo()
 		sbytes+=tmps;
 	}
     fclose(fp);
-	tmpr=(oldrbytes==0?0:rbytes-oldrbytes);
-	tmps=(oldsbytes==0?0:sbytes-oldsbytes);
+    //考虑到读取间隔不一定是1s，要运算成1s的量
+    tmpr=(oldrbytes==0?0:rbytes-oldrbytes)*1000/settings.value("updateIntervalSpinBox").toInt();
+    tmps=(oldsbytes==0?0:sbytes-oldsbytes)*1000/settings.value("updateIntervalSpinBox").toInt();
 	oldrbytes=rbytes;
 	oldsbytes=sbytes;
 
