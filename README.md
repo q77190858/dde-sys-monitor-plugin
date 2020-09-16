@@ -22,29 +22,23 @@ deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使
 
 ## 三、下载安装方式
 
-### 一键下载安装
+### 1. 码云一键下载安装
 
 deepin20 测试可用
 
-github下载：
-
 ```bash
-wget https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && pkill dde-dock
+wget https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && \
+ sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && \
+ pkill dde-dock
 ```
 
-码云下载：
-
-```bash
-wget https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && sudo mv libsys_monitor.so /usr/lib/dde-dock/plugins/ && pkill dde-dock
-```
-
-### 下载地址
+### 2. 手动下载地址
 
 github：[libsys_monitor.so](https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 
 码云：[libsys_monitor.so](https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 
-### 安装命令
+### 3. 安装命令
 
 ```bash
 sudo cp libsys_monitor.so /usr/lib/dde-dock/plugins/
@@ -54,14 +48,14 @@ dde-dock
 
 ## 四、源代码编译安装
 
-### 官方教程
+### 1. 官方插件开发教程
 
-编译教程见[官方开发文档](https://github.com/linuxdeepin/dde-dock/blob/master/plugins/plugin-guide/plugins-developer-guide.md
+教程见[官方开发文档](https://github.com/linuxdeepin/dde-dock/blob/master/plugins/plugin-guide/plugins-developer-guide.md
 )
 
-### 安装依赖
+### 2. 安装依赖
 
-编译另外还需要安装如下依赖（吐槽一下官方的开发文档讲的环境配置不全）：
+编译另外还需要安装如下依赖（官方的开发文档讲的环境配置不全）：
 
 ```bash
 sudo apt install build-essential
@@ -74,7 +68,7 @@ sudo apt install qtcreator
 sudo apt install cmake
 ```
 
-### 一键编译安装
+### 3. 一键编译安装
 
 ```bash
 cd dde-sys-monitor-plugin
@@ -109,3 +103,5 @@ cd dde-sys-monitor-plugin
 - 20200818 15:50更新：根据 @zty199 的启发加入了跟随系统主题变化文字颜色的功能，仅限于文字模式
 
 - 20200826 23:20更新：修复采样时间间隔不为1s时网速显示不准确的问题
+
+- 20200916 21:06更新：修复插件显示有时会被dde-dock遮挡的问题；添加关于信息

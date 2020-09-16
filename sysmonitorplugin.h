@@ -10,6 +10,7 @@
 #include <dde-dock/pluginsiteminterface.h>
 #include "mainwidget.h"
 #include "pluginsettingdialog.h"
+#include "aboutdialog.h"
 #include "type.h"
 
 extern struct SettingItem settingItems[];

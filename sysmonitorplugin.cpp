@@ -136,12 +136,20 @@ void SysMonitorPlugin::refreshInfo()
     }
     //大于等于10秒就归零
     bat_count*settings.value("updateIntervalSpinBox").toInt()>=10*1000?bat_count=0:bat_count++;
-
 	
     // 更新内容
     m_mainWidget->UpdateData(info,pos,settings);
     if(m_tipsWidget->isVisible())m_Widget_update(m_tipsWidget);
     if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
+    //当插件被遮挡的时候，刷新插件
+    QSize size=m_mainWidget->sizeHint();
+    if(size.width()>m_mainWidget->width()||size.height()>m_mainWidget->height())
+    {
+        m_proxyInter->itemRemoved(this, pluginName());
+        m_proxyInter->itemAdded(this, pluginName());
+        qDebug()<<"显示受限，刷新插件！！";
+    }
+    //m_proxyInter->itemUpdate(this,pluginName());
     //qDebug()<<"m_mainWidget->height():"<<m_mainWidget->height();
     //qDebug()<<"m_mainWidget->width():"<<m_mainWidget->width();
     //qDebug()<<"m_pluginWidget->height():"<<m_pluginWidget->height();
@@ -254,10 +262,10 @@ void SysMonitorPlugin::m_Widget_update(QLabel* label)
     QString baseInfo= QString("CPU:  %1\n"
                               "MEM: %2/%3=%4\n"
                               "SWAP:%5/%6=%7\n"
-                              "UP:  %8 %9/S\n"
-                              "DOWN:%10 %11/S")
+                              "UP:  %8 %9/s\n"
+                              "DOWN:%10 %11/s")
 .arg(info.scpu)
-.arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.mem)
+.arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.smem)
 .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
 .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))
 .arg(toHumanRead(oldrbytes,"B",1)).arg(toHumanRead(tmpr,"B",1));
@@ -337,6 +345,12 @@ const QString SysMonitorPlugin::itemContextMenu(const QString &itemKey)
     setting["isActive"] = true;
     items.push_back(setting);
 
+    QMap<QString, QVariant> about;
+    about["itemId"] = "about";
+    about["itemText"] = "关于";
+    about["isActive"] = true;
+    items.push_back(about);
+
     QMap<QString, QVariant> menu;
     menu["items"] = items;
     menu["checkableMenu"] = false;
@@ -351,12 +365,17 @@ void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &me
     Q_UNUSED(itemKey);
 
     // 根据上面接口设置的 id 执行不同的操作
-    if (menuId == "refresh") {
-        
-    } else if (menuId == "open") {
+    if (menuId == "refresh")
+    {
+        m_proxyInter->itemRemoved(this, pluginName());
+        m_proxyInter->itemAdded(this, pluginName());
+    }
+    else if (menuId == "open")
+    {
         QProcess::startDetached("deepin-system-monitor");
     }
-    else if(menuId == "setting") {
+    else if(menuId == "setting")
+    {
         int updataInterval=settings.value("updateIntervalSpinBox").toInt();
         pluginSettingDialog setting(&settings);
         if(setting.exec()==QDialog::Accepted)
@@ -368,6 +387,13 @@ void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &me
                 // 修改更新时间间隔
                 m_refreshTimer->start(settings.value("updateIntervalSpinBox").toInt());
             }
+        }
+    }
+    else if (menuId == "about")
+    {
+        aboutDialog aboutdialog;
+        if(aboutdialog.exec()==QDialog::Accepted)
+        {
         }
     }
 }

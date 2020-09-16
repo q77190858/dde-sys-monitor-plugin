@@ -11,7 +11,7 @@ MainWidget::MainWidget(Settings& settings,Dock::Position position)
     netChart=NULL;
     cpuChart=NULL;
     memChart=NULL;
-    setMinimumSize(5,5);
+    //setMinimumSize(5,5);
     //设置等宽字体
     font.setFamily("Noto Mono");
     // 获取dpi，一般默认都是96，根据dpi进行字体的缩放，直接设置pointsize无法解决hidpi问题
@@ -32,6 +32,7 @@ MainWidget::~MainWidget()
 
 void MainWidget::UpdateData(const Info &info, Dock::Position position, const Settings &settings)
 {
+    //qDebug()<<"MainWidget::UpdateData() start";
     //如果dock位置发生如下变化，则手动重构ui
     if(
             ((oldposition==Dock::Top||oldposition==Dock::Bottom)&&(position==Dock::Left||position==Dock::Right))
@@ -81,8 +82,6 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
         cpuMemLabel->setFont(font);
         netLabel->setFont(font);
 
-        //QString style=QString("QLabel {color: %1;}").arg(settings.value("fontColorComboBox").toInt()==0?"#fff":"#000");
-
         QString style;
         switch(settings.value("fontColorComboBox").toInt())
         {
@@ -102,8 +101,8 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
 
         cpuMemLabel->setStyleSheet(style);
         netLabel->setStyleSheet(style);
-        cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
-        netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+        //cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
+        //netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
 
         switch (settings.value("displayContentComboBox").toInt())
         {
@@ -217,4 +216,42 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
 
     }
     oldsettings=settings;
+    //qDebug()<<"MainWidget::UpdateData() finished";
+}
+
+QSize MainWidget::sizeHint() const
+{
+    //qDebug()<<"sizeHint被调用了\n";
+    if(centralLayout==NULL)return QSize(5,5);
+    QSize size;
+    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
+    if(!oldsettings.value("chartModeCheckBox").toInt())//文字模式
+    {
+        if(position==Dock::Top||position==Dock::Bottom)
+            size = QSize(QFontMetrics(font).boundingRect(cpuMemLabel->text()).size().width()/2+
+                         QFontMetrics(font).boundingRect(netLabel->text()).size().width()/2,
+                         oldsettings.value("heightSpinBox").toInt());
+        else
+            size = QSize(qMax(QFontMetrics(font).boundingRect(cpuMemLabel->text()).size().width(),
+                              QFontMetrics(font).boundingRect(netLabel->text()).size().width()),
+                         oldsettings.value("heightSpinBox").toInt()*2);
+    }
+    else//图表模式
+    {
+        if(position==Dock::Top||position==Dock::Bottom)
+            size = QSize((cpuChart==NULL?0:cpuChart->width)+
+                         (memChart==NULL?0:memChart->width)+
+                         (netChart==NULL?0:netChart->width),
+                         qMax(cpuChart==NULL?0:cpuChart->height,
+                              qMax(memChart==NULL?0:memChart->height,netChart==NULL?0:netChart->height)));
+        else
+            size = QSize(qMax(cpuChart==NULL?0:cpuChart->width,
+                              qMax(memChart==NULL?0:memChart->width,netChart==NULL?0:netChart->width)),
+                         (cpuChart==NULL?0:cpuChart->height)+
+                         (memChart==NULL?0:memChart->height)+
+                         (netChart==NULL?0:netChart->height));
+    }
+    //qDebug()<<size;
+    //qDebug()<<QString("width:%1    height:%2").arg(width()).arg(height());
+    return size;
 }

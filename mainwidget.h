@@ -28,11 +28,12 @@ public:
     explicit MainWidget(Settings&,Dock::Position);
     ~MainWidget();
     void UpdateData(const Info& info,Dock::Position position,const Settings& settings);
+    QSize sizeHint() const;
 
 public:
     int dpi;
     QBoxLayout *centralLayout;
-    // 文字模式数据显示在这2个 Label 上
+    // 文字模式数据显示在这2个Label上
     QLabel *cpuMemLabel,*netLabel;
     //显示数据的图表类
     StreamChart *netChart,*cpuChart,*memChart;
