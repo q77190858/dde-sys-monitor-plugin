@@ -5,6 +5,7 @@ struct SettingItem SysMonitorPlugin::settingItems[]={
 //全局设置选项
 {"chartModeCheckBox",0},//图表模式开关
 {"batInfoComboBox",0},//气泡电池信息开关
+{"autoRefreshComboBox",1},//自动刷新开关
 {"updateIntervalSpinBox",1000},//更新间隔ms
 
 //文字模式设置选项
@@ -143,7 +144,7 @@ void SysMonitorPlugin::refreshInfo()
     if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
     //当插件被遮挡的时候，刷新插件
     QSize size=m_mainWidget->sizeHint();
-    if(size.width()>m_mainWidget->width()||size.height()>m_mainWidget->height())
+    if(settings.value("autoRefreshComboBox").toInt()==1&&(size.width()>m_mainWidget->width()||size.height()>m_mainWidget->height()))
     {
         m_proxyInter->itemRemoved(this, pluginName());
         m_proxyInter->itemAdded(this, pluginName());
@@ -174,8 +175,8 @@ const QString SysMonitorPlugin::toHumanRead(unsigned long l,const char *unit,int
 	if(count==0){count++;f=f/1024;}
 
     if(f<0.1)str="  0";
-	else if(f<=9)str=QString::number(f,'f',1);
-    else if(f<=99)str=" "+QString::number(f,'f',0);
+    else if(f<10.0)str=QString::number(f,'f',1);
+    else if(f<100.0)str=" "+QString::number(f,'f',0);
 	else str=QString::number(f,'f',0);
 	
 	if(count==0)str+="B";

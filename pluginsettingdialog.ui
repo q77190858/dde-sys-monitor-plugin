@@ -1361,7 +1361,7 @@
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>40</y>
+     <y>20</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -1374,7 +1374,7 @@
    <property name="geometry">
     <rect>
      <x>290</x>
-     <y>30</y>
+     <y>10</y>
      <width>80</width>
      <height>36</height>
     </rect>
@@ -1390,6 +1390,51 @@
    </property>
    <property name="currentIndex">
     <number>0</number>
+   </property>
+   <item>
+    <property name="text">
+     <string>关闭</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>打开</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_29">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>60</y>
+     <width>121</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>被遮挡时自动刷新：</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="autoRefreshComboBox">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>50</y>
+     <width>80</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>80</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="currentText">
+    <string>打开</string>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
    </property>
    <item>
     <property name="text">
