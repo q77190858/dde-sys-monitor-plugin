@@ -144,6 +144,7 @@ void SysMonitorPlugin::refreshInfo()
     if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
     //当插件被遮挡的时候，刷新插件
     QSize size=m_mainWidget->sizeHint();
+    //qDebug()<<size;
     if(settings.value("autoRefreshComboBox").toInt()==1&&(size.width()>m_mainWidget->width()||size.height()>m_mainWidget->height()))
     {
         m_proxyInter->itemRemoved(this, pluginName());
@@ -216,7 +217,8 @@ const QString SysMonitorPlugin::pluginDisplayName() const
 
 const QString SysMonitorPlugin::pluginName() const
 {
-    return QStringLiteral("sys_monitor");
+    //return QStringLiteral("sys_monitor");
+    return QStringLiteral("datetime");
 }
 
 void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)

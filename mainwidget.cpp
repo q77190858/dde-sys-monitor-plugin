@@ -1,4 +1,5 @@
 #include "mainwidget.h"
+#include <DFontSizeManager>
 #include <DGuiApplicationHelper>
 
 DGUI_USE_NAMESPACE
@@ -227,7 +228,7 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
 
 QSize MainWidget::sizeHint() const
 {
-    if(centralLayout==NULL)return QSize(5,5);
+    if(centralLayout==NULL)return QSize(100,30);
     int w,h;
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     if(!oldsettings.value("chartModeCheckBox").toInt())//文字模式
