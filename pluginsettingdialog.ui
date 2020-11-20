@@ -26,7 +26,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>系统监控插件设置</string>
+   <string>plugin settings</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -61,7 +61,7 @@
    </property>
    <widget class="QWidget" name="tab_wordModeSettings">
     <attribute name="title">
-     <string>文字模式设置</string>
+     <string>Text mode setting</string>
     </attribute>
     <widget class="QGroupBox" name="displayContentSettingGroupBox">
      <property name="geometry">
@@ -73,7 +73,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>显示内容设置</string>
+      <string>Display content settings</string>
      </property>
      <widget class="QComboBox" name="displayContentComboBox">
       <property name="geometry">
@@ -86,17 +86,17 @@
       </property>
       <item>
        <property name="text">
-        <string>显示CPU、内存</string>
+        <string>Display CPU, memory</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>显示网速</string>
+        <string>Show internet speed</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>显示CP&amp;U、内存和网速</string>
+        <string>Display CP&amp;U, memory and network speed</string>
        </property>
       </item>
      </widget>
@@ -114,7 +114,7 @@
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>字体颜色：</string>
+         <string>font color：</string>
         </property>
        </widget>
       </item>
@@ -127,24 +127,24 @@
          </size>
         </property>
         <property name="currentText">
-         <string>白色</string>
+         <string>white</string>
         </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
         <item>
          <property name="text">
-          <string>白色</string>
+          <string>white</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>黑色</string>
+          <string>black</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>跟随系统</string>
+          <string>Follow system</string>
          </property>
         </item>
        </widget>
@@ -180,7 +180,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>高度：</string>
+         <string>height：</string>
         </property>
        </widget>
       </item>
@@ -237,7 +237,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>字体大小：</string>
+         <string>font size：</string>
         </property>
        </widget>
       </item>
@@ -309,20 +309,20 @@
     <widget class="QLabel" name="label_13">
      <property name="geometry">
       <rect>
-       <x>371</x>
+       <x>390</x>
        <y>30</y>
-       <width>71</width>
+       <width>61</width>
        <height>38</height>
       </rect>
      </property>
      <property name="text">
-      <string>控件间隔：</string>
+      <string>spacing</string>
      </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_chartModeSettings">
     <attribute name="title">
-     <string>图表模式设置</string>
+     <string>Chart mode settings</string>
     </attribute>
     <widget class="QTabWidget" name="tabWidget_2">
      <property name="geometry">
@@ -334,11 +334,11 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>CPU图表</string>
+       <string>CPU chart</string>
       </attribute>
       <widget class="QGroupBox" name="groupBox_2">
        <property name="geometry">
@@ -350,7 +350,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>CPU显示设置</string>
+        <string>CPU display settings</string>
        </property>
        <widget class="QLabel" name="label_16">
         <property name="geometry">
@@ -362,7 +362,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>工作颜色</string>
+         <string>Working color</string>
         </property>
        </widget>
        <widget class="QWidget" name="cpuWorkWidget" native="true">
@@ -386,12 +386,12 @@
          <rect>
           <x>200</x>
           <y>40</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QPushButton" name="cpuBorderColorPushButton">
@@ -399,25 +399,25 @@
          <rect>
           <x>480</x>
           <y>100</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_19">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>110</y>
-          <width>71</width>
+          <width>111</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>边框颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="cpuBorderRoundSpinBox">
@@ -450,18 +450,18 @@
          <rect>
           <x>20</x>
           <y>110</y>
-          <width>71</width>
+          <width>111</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>边框圆角</string>
+         <string>Rounded corners</string>
         </property>
        </widget>
        <widget class="QWidget" name="cpuBorderWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>410</x>
           <y>110</y>
           <width>61</width>
           <height>21</height>
@@ -479,25 +479,25 @@
          <rect>
           <x>480</x>
           <y>140</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_21">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>280</x>
           <y>150</y>
-          <width>71</width>
+          <width>111</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>背景颜色</string>
+         <string>background color</string>
         </property>
        </widget>
        <widget class="QWidget" name="cpuBackgroundWidget" native="true">
@@ -543,12 +543,12 @@
          <rect>
           <x>20</x>
           <y>150</y>
-          <width>61</width>
+          <width>91</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>显示宽度</string>
+         <string>Display width</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_23">
@@ -556,12 +556,12 @@
          <rect>
           <x>20</x>
           <y>190</y>
-          <width>61</width>
+          <width>91</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>显示高度</string>
+         <string>Display height</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="cpuHeightSpinBox">
@@ -590,7 +590,7 @@
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
-       <string>内存图表</string>
+       <string>Memory chart</string>
       </attribute>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="geometry">
@@ -602,7 +602,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>内存显示设置</string>
+        <string>Memory display settings</string>
        </property>
        <widget class="QLabel" name="label_17">
         <property name="geometry">
@@ -614,7 +614,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>使用颜色</string>
+         <string>Use color</string>
         </property>
        </widget>
        <widget class="QWidget" name="memUsedWidget" native="true">
@@ -638,12 +638,12 @@
          <rect>
           <x>200</x>
           <y>40</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QPushButton" name="memBorderColorPushButton">
@@ -651,25 +651,25 @@
          <rect>
           <x>480</x>
           <y>100</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_24">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>110</y>
-          <width>71</width>
+          <width>111</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>边框颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="memBorderRoundSpinBox">
@@ -702,18 +702,18 @@
          <rect>
           <x>20</x>
           <y>110</y>
-          <width>71</width>
+          <width>111</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>边框圆角</string>
+         <string>Rounded corners</string>
         </property>
        </widget>
        <widget class="QWidget" name="memBorderWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>410</x>
           <y>110</y>
           <width>61</width>
           <height>21</height>
@@ -731,31 +731,31 @@
          <rect>
           <x>480</x>
           <y>140</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_26">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>300</x>
           <y>150</y>
-          <width>71</width>
+          <width>101</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>背景颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QWidget" name="memBackgroundWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>410</x>
           <y>150</y>
           <width>61</width>
           <height>21</height>
@@ -795,12 +795,12 @@
          <rect>
           <x>20</x>
           <y>150</y>
-          <width>61</width>
+          <width>91</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>显示宽度</string>
+         <string>Display width</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_28">
@@ -808,12 +808,12 @@
          <rect>
           <x>20</x>
           <y>190</y>
-          <width>61</width>
+          <width>91</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>显示高度</string>
+         <string>Display height</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="memHeightSpinBox">
@@ -842,37 +842,37 @@
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>网络图表</string>
+       <string>Network diagram</string>
       </attribute>
       <widget class="QGroupBox" name="groupBox">
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>10</y>
          <width>661</width>
          <height>231</height>
         </rect>
        </property>
        <property name="title">
-        <string>网络显示设置</string>
+        <string>Network display settings</string>
        </property>
        <widget class="QLabel" name="label_5">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>10</x>
           <y>30</y>
-          <width>101</width>
+          <width>171</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>上传封顶流量值</string>
+         <string>Upload capped traffic value</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="netUpTopSpinBox">
         <property name="geometry">
          <rect>
-          <x>130</x>
+          <x>180</x>
           <y>20</y>
           <width>161</width>
           <height>38</height>
@@ -897,20 +897,20 @@
        <widget class="QLabel" name="label_6">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>360</x>
           <y>30</y>
-          <width>71</width>
+          <width>81</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>上传颜色</string>
+         <string>Upload color</string>
         </property>
        </widget>
        <widget class="QWidget" name="netUpWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>450</x>
           <y>30</y>
           <width>61</width>
           <height>21</height>
@@ -926,33 +926,33 @@
        <widget class="QPushButton" name="netUpColorPushButton">
         <property name="geometry">
          <rect>
-          <x>480</x>
+          <x>530</x>
           <y>20</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_9">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>10</x>
           <y>70</y>
-          <width>101</width>
+          <width>171</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>下载封顶流量值</string>
+         <string>down capped traffic value</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="netDownTopSpinBox">
         <property name="geometry">
          <rect>
-          <x>130</x>
+          <x>180</x>
           <y>60</y>
           <width>161</width>
           <height>38</height>
@@ -977,33 +977,33 @@
        <widget class="QPushButton" name="netDownColorPushButton">
         <property name="geometry">
          <rect>
-          <x>480</x>
+          <x>530</x>
           <y>60</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_10">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>350</x>
           <y>70</y>
-          <width>71</width>
+          <width>101</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>下载颜色</string>
+         <string>Download color</string>
         </property>
        </widget>
        <widget class="QWidget" name="netDownWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>450</x>
           <y>70</y>
           <width>61</width>
           <height>21</height>
@@ -1019,33 +1019,33 @@
        <widget class="QPushButton" name="netBorderColorPushButton">
         <property name="geometry">
          <rect>
-          <x>480</x>
+          <x>530</x>
           <y>100</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_12">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>370</x>
           <y>110</y>
-          <width>71</width>
+          <width>81</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>边框颜色</string>
+         <string>Border color</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="netBorderRoundSpinBox">
         <property name="geometry">
          <rect>
-          <x>130</x>
+          <x>180</x>
           <y>100</y>
           <width>161</width>
           <height>38</height>
@@ -1072,18 +1072,18 @@
          <rect>
           <x>20</x>
           <y>110</y>
-          <width>71</width>
+          <width>131</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>边框圆角</string>
+         <string>Rounded corners</string>
         </property>
        </widget>
        <widget class="QWidget" name="netBorderWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>450</x>
           <y>110</y>
           <width>61</width>
           <height>21</height>
@@ -1099,33 +1099,33 @@
        <widget class="QPushButton" name="netBackgroundColorPushButton">
         <property name="geometry">
          <rect>
-          <x>480</x>
+          <x>530</x>
           <y>140</y>
-          <width>71</width>
+          <width>121</width>
           <height>36</height>
          </rect>
         </property>
         <property name="text">
-         <string>选择颜色</string>
+         <string>choose the color</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_14">
         <property name="geometry">
          <rect>
-          <x>320</x>
+          <x>340</x>
           <y>150</y>
-          <width>71</width>
+          <width>111</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>背景颜色</string>
+         <string>background color</string>
         </property>
        </widget>
        <widget class="QWidget" name="netBackgroundWidget" native="true">
         <property name="geometry">
          <rect>
-          <x>400</x>
+          <x>450</x>
           <y>150</y>
           <width>61</width>
           <height>21</height>
@@ -1141,7 +1141,7 @@
        <widget class="QSpinBox" name="netWidthSpinBox">
         <property name="geometry">
          <rect>
-          <x>130</x>
+          <x>150</x>
           <y>140</y>
           <width>131</width>
           <height>38</height>
@@ -1165,12 +1165,12 @@
          <rect>
           <x>20</x>
           <y>150</y>
-          <width>61</width>
+          <width>91</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>显示宽度</string>
+         <string>Display width</string>
         </property>
        </widget>
        <widget class="QLabel" name="label_8">
@@ -1178,18 +1178,18 @@
          <rect>
           <x>20</x>
           <y>190</y>
-          <width>61</width>
+          <width>101</width>
           <height>22</height>
          </rect>
         </property>
         <property name="text">
-         <string>显示高度</string>
+         <string>Display height</string>
         </property>
        </widget>
        <widget class="QSpinBox" name="netHeightSpinBox">
         <property name="geometry">
          <rect>
-          <x>130</x>
+          <x>150</x>
           <y>180</y>
           <width>131</width>
           <height>38</height>
@@ -1221,19 +1221,19 @@
       </rect>
      </property>
      <property name="title">
-      <string>显示图表</string>
+      <string>Show chart</string>
      </property>
      <widget class="QCheckBox" name="netChartCheckBox">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>30</y>
         <width>97</width>
         <height>26</height>
        </rect>
       </property>
       <property name="text">
-       <string>网络</string>
+       <string>Internet</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="cpuChartCheckBox">
@@ -1252,14 +1252,14 @@
      <widget class="QCheckBox" name="memChartCheckBox">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>100</x>
         <y>30</y>
-        <width>97</width>
+        <width>71</width>
         <height>26</height>
        </rect>
       </property>
       <property name="text">
-       <string>内存</string>
+       <string>RAM</string>
       </property>
      </widget>
     </widget>
@@ -1294,14 +1294,14 @@
     <widget class="QLabel" name="label_18">
      <property name="geometry">
       <rect>
-       <x>414</x>
+       <x>420</x>
        <y>30</y>
-       <width>71</width>
+       <width>61</width>
        <height>38</height>
       </rect>
      </property>
      <property name="text">
-      <string>控件间隔：</string>
+      <string>spacing：</string>
      </property>
     </widget>
    </widget>
@@ -1311,25 +1311,25 @@
     <rect>
      <x>30</x>
      <y>40</y>
-     <width>121</width>
+     <width>141</width>
      <height>26</height>
     </rect>
    </property>
    <property name="text">
-    <string>使用图表模式 </string>
+    <string>Use chart mode </string>
    </property>
   </widget>
   <widget class="QLabel" name="label_15">
    <property name="geometry">
     <rect>
-     <x>410</x>
+     <x>380</x>
      <y>40</y>
-     <width>71</width>
+     <width>111</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>更新间隔：</string>
+    <string>Update interval：</string>
    </property>
   </widget>
   <widget class="QSpinBox" name="updateIntervalSpinBox">
@@ -1360,14 +1360,14 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>100</x>
      <y>20</y>
-     <width>91</width>
+     <width>181</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>气泡电池信息：</string>
+    <string>Bubble battery information：</string>
    </property>
   </widget>
   <widget class="QComboBox" name="batInfoComboBox">
@@ -1386,33 +1386,33 @@
     </size>
    </property>
    <property name="currentText">
-    <string>关闭</string>
+    <string> off</string>
    </property>
    <property name="currentIndex">
     <number>0</number>
    </property>
    <item>
     <property name="text">
-     <string>关闭</string>
+     <string> off</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>打开</string>
+     <string> on</string>
     </property>
    </item>
   </widget>
   <widget class="QLabel" name="label_29">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>50</x>
      <y>60</y>
-     <width>121</width>
+     <width>241</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>被遮挡时自动刷新：</string>
+    <string>Refresh automatically when blocked：</string>
    </property>
   </widget>
   <widget class="QComboBox" name="autoRefreshComboBox">
@@ -1431,19 +1431,19 @@
     </size>
    </property>
    <property name="currentText">
-    <string>打开</string>
+    <string> off</string>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <item>
     <property name="text">
-     <string>关闭</string>
+     <string> off</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>打开</string>
+     <string>on</string>
     </property>
    </item>
   </widget>

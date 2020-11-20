@@ -19,7 +19,7 @@ pluginSettingDialog::pluginSettingDialog(Settings *settings,QWidget *parent) :
     {
         i.next();
         QWidget *obj=findChild<QWidget*>(i.key());
-        if(obj==0){qDebug()<<"不能找到对象名为："<<i.key();continue;}
+        if(obj==0){qDebug()<<"Could not find object named："<<i.key();continue;}
         if(obj->metaObject()->className()==QStringLiteral("QComboBox"))
         {
             QComboBox *cb=(QComboBox*)obj;
@@ -41,7 +41,7 @@ pluginSettingDialog::pluginSettingDialog(Settings *settings,QWidget *parent) :
             pal.setColor(QPalette::Background,i.value().value<QColor>());
             wg->setAutoFillBackground(true);
             wg->setPalette(pal);
-            //qDebug()<<"颜色是："<<i.value().value<QColor>();
+            //qDebug()<<"Color is："<<i.value().value<QColor>();
         }
     }
     foreach(QPushButton* btn,findChildren<QPushButton*>(QRegExp("\\w*ColorPushButton")))
@@ -62,7 +62,7 @@ void pluginSettingDialog::getDisplayContentSetting(Settings *settings)
     {
         i.next();
         QWidget *obj=findChild<QWidget*>(i.key());
-        if(obj==0){qDebug()<<"不能找到对象名为："<<i.key();continue;}
+        if(obj==0){qDebug()<<"Could not find object named："<<i.key();continue;}
         if(obj->metaObject()->className()==QStringLiteral("QComboBox"))
         {
             QComboBox *cb=(QComboBox*)obj;
@@ -93,7 +93,7 @@ void pluginSettingDialog::selectColor()
     colorWidget=findChild<QWidget*>(sender()->objectName().replace("ColorPushButton","Widget"));
 
     QColor color = QColorDialog::getColor(colorWidget->palette().background().color(),
-                                          this,tr("颜色对话框"),QColorDialog::ShowAlphaChannel);
+                                          this,tr("Color dialog"),QColorDialog::ShowAlphaChannel);
     if(color!=QColor::Invalid)
     {
         pal.setColor(QPalette::Background,color);

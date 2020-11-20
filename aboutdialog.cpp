@@ -17,6 +17,10 @@ void aboutDialog::on_blogPushButton_clicked()
 {
     QDesktopServices::openUrl(QUrl("https://blog.mxslly.com"));
 }
+void aboutDialog::on_githubkhumnath_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/khumnath"));
+}
 
 void aboutDialog::on_giteePushButton_clicked()
 {

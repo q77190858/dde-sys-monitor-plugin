@@ -149,7 +149,7 @@ void SysMonitorPlugin::refreshInfo()
     {
         m_proxyInter->itemRemoved(this, pluginName());
         m_proxyInter->itemAdded(this, pluginName());
-        qDebug()<<"显示受限，刷新插件！！";
+        qDebug()<<"Display limited, refresh plugin！！";
     }
     //m_proxyInter->itemUpdate(this,pluginName());
     //qDebug()<<"m_mainWidget->height():"<<m_mainWidget->height();
@@ -212,7 +212,7 @@ void SysMonitorPlugin::writeConfig(Settings *settings)
 
 const QString SysMonitorPlugin::pluginDisplayName() const
 {
-    return QString("监视器");
+    return QString("Monitor");
 }
 
 const QString SysMonitorPlugin::pluginName() const
@@ -332,25 +332,25 @@ const QString SysMonitorPlugin::itemContextMenu(const QString &itemKey)
 
     QMap<QString, QVariant> refresh;
     refresh["itemId"] = "refresh";
-    refresh["itemText"] = "刷新";
+    refresh["itemText"] = "Refresh";
     refresh["isActive"] = true;
     items.push_back(refresh);
 
     QMap<QString, QVariant> open;
     open["itemId"] = "open";
-    open["itemText"] = "打开系统监视器";
+    open["itemText"] = "Open system monitor";
     open["isActive"] = true;
     items.push_back(open);
 
     QMap<QString, QVariant> setting;
     setting["itemId"] = "setting";
-    setting["itemText"] = "设置";
+    setting["itemText"] = "setting";
     setting["isActive"] = true;
     items.push_back(setting);
 
     QMap<QString, QVariant> about;
     about["itemId"] = "about";
-    about["itemText"] = "关于";
+    about["itemText"] = "about plugin";
     about["isActive"] = true;
     items.push_back(about);
 

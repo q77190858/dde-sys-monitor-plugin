@@ -18,6 +18,8 @@ public:
     ~aboutDialog();
 
 private slots:
+    void on_githubkhumnath_clicked();
+
     void on_blogPushButton_clicked();
 
     void on_giteePushButton_clicked();
