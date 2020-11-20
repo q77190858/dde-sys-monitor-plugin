@@ -37,6 +37,7 @@ english version https://github.com/khumnath/dde-sys-monitor-plugin/releases/down
 chinese: libsys_monitor.so (https://github.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
 
 Code Cloud: libsys_monitor.so (https://gite.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so)
+
 for english users (libsys_monitor.so) () https://github.com/khumnath/dde-sys-monitor-plugin/releases/download/20201025en/libsys_monitor.so)
 
 ### 3. The installation command
