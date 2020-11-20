@@ -4,24 +4,23 @@ Deepin monitors the dock plug-in, which monitors CPU usage, memory usage, swap u
 
 -----------------------
 
-First, reference items
+## One, reference project
 
-- (CMDU_DDE_DOCK for deepin) (https://github.com/sonichy/CMDU_DDE_DOCK) @sonichy
+-[CMDU_DDE_DOCK for deepin](https://github.com/sonichy/CMDU_DDE_DOCK)@sonichy
 
-- (indicator-multiload in ubuntu) (https://launchpad.net/ubuntu/source/indicator-multiload/)
+-[indicator-multiload in ubuntu](https://launchpad.net/ubuntu/+source/indicator-multiload/)
 
-Second, picture display
+## 2. Picture display
 
-! (alt) (image /wordmode1.jpg) ! (alt) (image/chartmode1.jpg)! (alt) (image/ wordmode2.jpg) ! (alt) (image/chartmode2.jpg)
+![alt](image/wordmode1.jpg) ![alt](image/chartmode1.jpg) ![alt](image/wordmode2.jpg) ![alt](image/chartmode2.jpg)
 
-The above four figures are the performance of the plug-in in text mode and chart mode, and the configuration of the plug-in is very high
+The above four pictures are the performance of the plug-in in text mode and chart mode, and the plug-in is highly configurable
 
-! (alt) (image/setting1.jpg)! (alt) (image/setting2.jpg)
+![alt](image/setting1.jpg) ![alt](image/setting2.jpg)
 
-Right-click the menu with settings options to set what's displayed in each mode
+There are setting options in the right-click menu, you can set the display content in each mode
 
-Third, download the installation method
-
+## Three, download and install
 ### 1. Code cloud one-click download installation
 
 Deepin20 english plugin
