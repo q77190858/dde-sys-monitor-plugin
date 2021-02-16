@@ -18,6 +18,7 @@ pluginSettingDialog::pluginSettingDialog(Settings *settings,QWidget *parent) :
     while(i.hasNext())
     {
         i.next();
+        //找到以key为名字的widget
         QWidget *obj=findChild<QWidget*>(i.key());
         if(obj==0){qDebug()<<"不能找到对象名为："<<i.key();continue;}
         if(obj->metaObject()->className()==QStringLiteral("QComboBox"))
@@ -43,6 +44,11 @@ pluginSettingDialog::pluginSettingDialog(Settings *settings,QWidget *parent) :
             wg->setPalette(pal);
             //qDebug()<<"颜色是："<<i.value().value<QColor>();
         }
+        else if(obj->metaObject()->className()==QStringLiteral("QLineEdit"))
+        {
+            QLineEdit *le=(QLineEdit*)obj;
+            le->setText(i.value().value<QString>());
+        }
     }
     foreach(QPushButton* btn,findChildren<QPushButton*>(QRegExp("\\w*ColorPushButton")))
     {
@@ -61,6 +67,7 @@ void pluginSettingDialog::getDisplayContentSetting(Settings *settings)
     while(i.hasNext())
     {
         i.next();
+        //找到以key为名字的widget
         QWidget *obj=findChild<QWidget*>(i.key());
         if(obj==0){qDebug()<<"不能找到对象名为："<<i.key();continue;}
         if(obj->metaObject()->className()==QStringLiteral("QComboBox"))
@@ -82,6 +89,11 @@ void pluginSettingDialog::getDisplayContentSetting(Settings *settings)
         {
             QWidget *wg=(QWidget*)obj;
             settings->insert(wg->objectName(),wg->palette().background().color());
+        }
+        else if(obj->metaObject()->className()==QStringLiteral("QLineEdit"))
+        {
+            QLineEdit *le=(QLineEdit*)obj;
+            settings->insert(le->objectName(),le->text());
         }
     }
 }

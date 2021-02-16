@@ -110,24 +110,34 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
         case DisplayContentSetting::CPUMEM:
             cpuMemLabel->setVisible(true);
             netLabel->setVisible(false);
-            cpuMemLabel->setText(QString("CPU:%1\nMEM:%2").arg(info.scpu).arg(info.smem));
+            cpuMemLabel->setText(QString("%1%2\n%3%4")
+                                 .arg(settings.value("cpuDiyWordLineEdit").value<QString>())
+                                 .arg(info.scpu)
+                                 .arg(settings.value("memDiyWordLineEdit").value<QString>())
+                                 .arg(info.smem));
             break;
         case DisplayContentSetting::NETSPEED:
             cpuMemLabel->setVisible(false);
             netLabel->setVisible(true);
-            netLabel->setText(QString("▴%1/s\n▾%2/s").arg(info.snetup).arg(info.snetdwon));
+            netLabel->setText(QString("%1%2/s\n%3%4/s")
+                              .arg(settings.value("upNetspeedDiyWordLineEdit").value<QString>())
+                              .arg(info.snetup)
+                              .arg(settings.value("downNetspeedDiyWordLineEdit").value<QString>())
+                              .arg(info.snetdwon));
             break;
-        case DisplayContentSetting::ALL:
+        default://DisplayContentSetting::ALL:
             cpuMemLabel->setVisible(true);
             netLabel->setVisible(true);
-            cpuMemLabel->setText(QString("CPU:%1\nMEM:%2").arg(info.scpu).arg(info.smem));
-            netLabel->setText(QString("▴%1/s\n▾%2/s").arg(info.snetup).arg(info.snetdwon));
-            break;
-        default:
-            cpuMemLabel->setVisible(true);
-            netLabel->setVisible(true);
-            cpuMemLabel->setText(QString("CPU:%1\nMEM:%2").arg(info.scpu).arg(info.smem));
-            netLabel->setText(QString("▴%1/s\n▾%2/s").arg(info.snetup).arg(info.snetdwon));
+            cpuMemLabel->setText(QString("%1%2\n%3%4")
+                                 .arg(settings.value("cpuDiyWordLineEdit").value<QString>())
+                                 .arg(info.scpu)
+                                 .arg(settings.value("memDiyWordLineEdit").value<QString>())
+                                 .arg(info.smem));
+            netLabel->setText(QString("%1%2/s\n%3%4/s")
+                              .arg(settings.value("upNetspeedDiyWordLineEdit").value<QString>())
+                              .arg(info.snetup)
+                              .arg(settings.value("downNetspeedDiyWordLineEdit").value<QString>())
+                              .arg(info.snetdwon));
             break;
         }
     }

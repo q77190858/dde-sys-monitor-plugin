@@ -5,12 +5,15 @@ struct SettingItem SysMonitorPlugin::settingItems[]={
 //全局设置选项
 {"chartModeCheckBox",0},//图表模式开关
 {"batInfoComboBox",0},//气泡电池信息开关
-{"autoRefreshComboBox",1},//自动刷新开关
 {"updateIntervalSpinBox",1000},//更新间隔ms
 
 //文字模式设置选项
 {"displayContentComboBox",DisplayContentSetting::ALL},
 {"wordSpacingSpinBox",4},
+{"cpuDiyWordLineEdit",QString("CPU:")},
+{"memDiyWordLineEdit",QString("MEM:")},
+{"upNetspeedDiyWordLineEdit",QString("▴")},
+{"downNetspeedDiyWordLineEdit",QString("▾")},
 {"heightSpinBox",28},
 {"fontSizeSpinBox",9},
 {"fontColorComboBox",0},
@@ -142,15 +145,7 @@ void SysMonitorPlugin::refreshInfo()
     m_mainWidget->UpdateData(info,pos,settings);
     if(m_tipsWidget->isVisible())m_Widget_update(m_tipsWidget);
     if(m_appletWidget->isVisible())m_Widget_update(m_appletWidget);
-    //当插件被遮挡的时候，刷新插件
-    QSize size=m_mainWidget->sizeHint();
-    //qDebug()<<size;
-    if(settings.value("autoRefreshComboBox").toInt()==1&&(size.width()>m_mainWidget->width()||size.height()>m_mainWidget->height()))
-    {
-        m_proxyInter->itemRemoved(this, pluginName());
-        m_proxyInter->itemAdded(this, pluginName());
-        qDebug()<<"显示受限，刷新插件！！";
-    }
+
     //m_proxyInter->itemUpdate(this,pluginName());
     //qDebug()<<"m_mainWidget->height():"<<m_mainWidget->height();
     //qDebug()<<"m_mainWidget->width():"<<m_mainWidget->width();
