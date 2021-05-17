@@ -58,12 +58,11 @@ dde-dock
 编译另外还需要安装如下依赖（官方的开发文档讲的环境配置不全）：
 
 ```bash
-sudo apt install build-essential
-sudo apt install dde-dock-dev
-sudo apt install qtbase5-dev-tools
-sudo apt install libdtkwidget-dev
+sudo apt install build-essential dde-dock-dev qtbase5-dev-tools libdtkwidget-dev
 #使用qtcreator集成环境可以直接设计ui界面，目前qt版本是5.11.3，非必要
 sudo apt install qtcreator
+#deepin/uos用户使用此命令可以获取最新的qtcreator
+sudo apt install io.qt.qtcreator
 #使用qtcreator打开cmake工程要先安装cmake
 sudo apt install cmake
 ```
