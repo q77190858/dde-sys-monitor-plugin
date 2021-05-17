@@ -102,8 +102,6 @@ void MainWidget::UpdateData(const Info &info, Dock::Position position, const Set
 
         cpuMemLabel->setStyleSheet(style);
         netLabel->setStyleSheet(style);
-        //cpuMemLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
-        //netLabel->setFixedHeight(settings.value("heightSpinBox").toInt());
 
         switch (settings.value("displayContentComboBox").toInt())
         {

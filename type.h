@@ -5,6 +5,7 @@
 //主插件类传递给widget的信息结构体
 struct Info{
     QString scpu;int cpu;
+    QString scputemp;double cputemp;
     QString smem;int mem;
     QString snetup;int netup;
     QString snetdwon;int netdown;

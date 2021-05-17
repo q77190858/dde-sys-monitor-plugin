@@ -14,7 +14,6 @@ struct SettingItem SysMonitorPlugin::settingItems[]={
 {"memDiyWordLineEdit",QString("MEM:")},
 {"upNetspeedDiyWordLineEdit",QString("▴")},
 {"downNetspeedDiyWordLineEdit",QString("▾")},
-{"heightSpinBox",28},
 {"fontSizeSpinBox",9},
 {"fontColorComboBox",0},
 
@@ -137,6 +136,19 @@ void SysMonitorPlugin::refreshInfo()
         battery_watts=-1.0;
         fscanf(fp,"    energy-rate:         %lf W",&battery_watts);
         pclose(fp);
+
+        //使用sensors获得CPU温度
+        fp=NULL;
+        fp=popen("sensors | grep 'Core 0'","r");
+        info.cputemp=0;
+        if(fp != NULL){
+            fscanf(fp,"Core 0:        %lf°C",&info.cputemp);
+        }
+        else {
+            perror("Could not run sensors command");
+        }
+        pclose(fp);
+        info.scputemp=QString("%1℃").arg(info.cputemp);
     }
     //大于等于10秒就归零
     bat_count*settings.value("updateIntervalSpinBox").toInt()>=10*1000?bat_count=0:bat_count++;
@@ -191,7 +203,6 @@ void SysMonitorPlugin::readConfig(Settings *settings)
         settings->insert(settingItems[i].name,
                          m_proxyInter->getValue(this,settingItems[i].name,settingItems[i].value));
     }
-    //settings->insert("cpuChartCheckBox",1);
 }
 
 //写配置信息
@@ -257,12 +268,12 @@ QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
 void SysMonitorPlugin::m_Widget_update(QLabel* label)
 {
     // 设置/刷新 tips 中的信息
-    QString baseInfo= QString("CPU:  %1\n"
-                              "MEM: %2/%3=%4\n"
-                              "SWAP:%5/%6=%7\n"
-                              "UP:  %8 %9/s\n"
-                              "DOWN:%10 %11/s")
-.arg(info.scpu)
+    QString baseInfo= QString("CPU:  %1 %2\n"
+                              "MEM: %3/%4=%5\n"
+                              "SWAP:%6/%7=%8\n"
+                              "UP:  %9 %10/s\n"
+                              "DOWN:%11 %12/s")
+.arg(info.scpu).arg(info.scputemp)
 .arg(toHumanRead(totalmem-availablemem,"KB",1)).arg(toHumanRead(totalmem,"KB",1)).arg(info.smem)
 .arg(toHumanRead(totalswap-freeswap,"KB",1)).arg(toHumanRead(totalswap,"KB",1)).arg(strswap)
 .arg(toHumanRead(oldsbytes,"B",1)).arg(toHumanRead(tmps,"B",1))

@@ -63,189 +63,12 @@
     <attribute name="title">
      <string>文字模式设置</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>315</y>
-       <width>175</width>
-       <height>38</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>字体颜色：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="fontColorComboBox">
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="currentText">
-         <string>白色</string>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>白色</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>黑色</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>跟随系统</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>13</width>
-          <height>35</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>225</y>
-       <width>228</width>
-       <height>42</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetMinimumSize</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>高度：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="heightSpinBox">
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::UpDownArrows</enum>
-        </property>
-        <property name="suffix">
-         <string>px</string>
-        </property>
-        <property name="minimum">
-         <number>10</number>
-        </property>
-        <property name="maximum">
-         <number>50</number>
-        </property>
-        <property name="singleStep">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>28</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>270</y>
-       <width>256</width>
-       <height>42</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetMinimumSize</enum>
-      </property>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>字体大小：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="fontSizeSpinBox">
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::UpDownArrows</enum>
-        </property>
-        <property name="suffix">
-         <string>px</string>
-        </property>
-        <property name="minimum">
-         <number>5</number>
-        </property>
-        <property name="maximum">
-         <number>20</number>
-        </property>
-        <property name="singleStep">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>9</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
     <widget class="QSpinBox" name="wordSpacingSpinBox">
      <property name="geometry">
       <rect>
        <x>447</x>
        <y>30</y>
-       <width>134</width>
+       <width>141</width>
        <height>38</height>
       </rect>
      </property>
@@ -433,6 +256,97 @@
      </property>
      <property name="maxLength">
       <number>50</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>41</x>
+       <y>320</y>
+       <width>70</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>字体颜色：</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="fontColorComboBox">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>316</y>
+       <width>86</width>
+       <height>36</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="currentText">
+      <string>白色</string>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>白色</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>黑色</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>跟随系统</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>41</x>
+       <y>280</y>
+       <width>70</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>字体大小：</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="fontSizeSpinBox">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>271</y>
+       <width>151</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::UpDownArrows</enum>
+     </property>
+     <property name="suffix">
+      <string>px</string>
+     </property>
+     <property name="minimum">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>9</number>
      </property>
     </widget>
    </widget>
@@ -637,7 +551,7 @@
          <rect>
           <x>130</x>
           <y>140</y>
-          <width>131</width>
+          <width>161</width>
           <height>38</height>
          </rect>
         </property>
@@ -685,7 +599,7 @@
          <rect>
           <x>130</x>
           <y>180</y>
-          <width>131</width>
+          <width>161</width>
           <height>38</height>
          </rect>
         </property>
@@ -889,7 +803,7 @@
          <rect>
           <x>130</x>
           <y>140</y>
-          <width>131</width>
+          <width>161</width>
           <height>38</height>
          </rect>
         </property>
@@ -937,7 +851,7 @@
          <rect>
           <x>130</x>
           <y>180</y>
-          <width>131</width>
+          <width>161</width>
           <height>38</height>
          </rect>
         </property>
@@ -1259,7 +1173,7 @@
          <rect>
           <x>130</x>
           <y>140</y>
-          <width>131</width>
+          <width>161</width>
           <height>38</height>
          </rect>
         </property>
@@ -1307,7 +1221,7 @@
          <rect>
           <x>130</x>
           <y>180</y>
-          <width>131</width>
+          <width>161</width>
           <height>38</height>
          </rect>
         </property>
