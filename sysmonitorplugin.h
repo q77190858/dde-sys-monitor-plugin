@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <QLabel>
 #include <QDebug>
-#include <dde-dock/pluginsiteminterface.h>
+#include <pluginsiteminterface.h>
 #include "mainwidget.h"
 #include "pluginsettingdialog.h"
 #include "aboutdialog.h"

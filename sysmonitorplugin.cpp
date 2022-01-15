@@ -381,7 +381,7 @@ void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &me
     }
     else if (menuId == "open")
     {
-        QProcess::startDetached("deepin-system-monitor");
+        QProcess::startDetached("deepin-system-monitor",QStringList());
     }
     else if(menuId == "setting")
     {
