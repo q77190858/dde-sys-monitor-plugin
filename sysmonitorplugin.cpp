@@ -223,7 +223,7 @@ const QString SysMonitorPlugin::pluginDisplayName() const
 
 const QString SysMonitorPlugin::pluginName() const
 {
-    //return QStringLiteral("sys_monitor");
+//    return QStringLiteral("sys_monitor");
     return QStringLiteral("datetime");
 }
 
@@ -256,6 +256,11 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
     // 连接 Timer 超时的信号到更新数据的槽上
     connect(m_refreshTimer, &QTimer::timeout, this, &SysMonitorPlugin::refreshInfo);
 
+}
+
+PluginsItemInterface::PluginSizePolicy SysMonitorPlugin::pluginSizePolicy() const
+{
+    return PluginSizePolicy::Custom;
 }
 
 QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)

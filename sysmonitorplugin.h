@@ -28,6 +28,8 @@ public:
     const QString pluginName() const override;
     void init(PluginProxyInterface *proxyInter) override;
 
+    PluginSizePolicy pluginSizePolicy() const override;
+
     QWidget *itemWidget(const QString &itemKey) override;
     QWidget *itemTipsWidget(const QString &itemKey) override;
     QWidget *itemPopupApplet(const QString &itemKey) override;
