@@ -1339,8 +1339,8 @@
   <widget class="QCheckBox" name="chartModeCheckBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
+     <x>20</x>
+     <y>38</y>
      <width>121</width>
      <height>26</height>
     </rect>
@@ -1390,21 +1390,21 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>150</x>
      <y>40</y>
-     <width>91</width>
+     <width>171</width>
      <height>22</height>
     </rect>
    </property>
    <property name="text">
-    <string>气泡电池信息：</string>
+    <string>显示电池功率和CPU温度：</string>
    </property>
   </widget>
   <widget class="QComboBox" name="batInfoComboBox">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>30</y>
+     <x>320</x>
+     <y>31</y>
      <width>80</width>
      <height>36</height>
     </rect>

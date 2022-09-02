@@ -223,8 +223,8 @@ const QString SysMonitorPlugin::pluginDisplayName() const
 
 const QString SysMonitorPlugin::pluginName() const
 {
-//    return QStringLiteral("sys_monitor");
-    return QStringLiteral("datetime");
+    return QStringLiteral("sys_monitor");
+//    return QStringLiteral("datetime");
 }
 
 void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
@@ -245,22 +245,21 @@ void SysMonitorPlugin::init(PluginProxyInterface *proxyInter)
     battery_watts=-1.0;
     bat_count=0;
 
-    // 如果插件没有被禁用则在初始化插件时才添加主控件到面板上
-    if (!pluginIsDisable()) {
-        m_proxyInter->itemAdded(this, pluginName());
-    }
-
     // 设置 Timer 超时为 updateIntervalSpinBox 中的ms，即每次更新一次控件上的数据，并启动这个定时器
     m_refreshTimer->start(settings.value("updateIntervalSpinBox").toInt());
 
     // 连接 Timer 超时的信号到更新数据的槽上
     connect(m_refreshTimer, &QTimer::timeout, this, &SysMonitorPlugin::refreshInfo);
 
+    // 如果插件没有被禁用则在初始化插件时才添加主控件到面板上
+    if (!pluginIsDisable()) {
+        m_proxyInter->itemAdded(this, pluginName());
+    }
 }
 
 PluginsItemInterface::PluginSizePolicy SysMonitorPlugin::pluginSizePolicy() const
 {
-    return PluginSizePolicy::Custom;
+    return PluginsItemInterface::Custom;
 }
 
 QWidget *SysMonitorPlugin::itemWidget(const QString &itemKey)
@@ -377,6 +376,7 @@ const QString SysMonitorPlugin::itemContextMenu(const QString &itemKey)
 void SysMonitorPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey);
+    Q_UNUSED(checked)
 
     // 根据上面接口设置的 id 执行不同的操作
     if (menuId == "refresh")

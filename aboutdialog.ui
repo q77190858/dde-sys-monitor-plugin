@@ -82,7 +82,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>版本号：20220125</string>
+    <string>版本号：20220902</string>
    </property>
   </widget>
   <widget class="QPushButton" name="giteePushButton">

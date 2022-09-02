@@ -24,7 +24,7 @@ deepin系统监控dock插件，可监控CPU使用率、内存使用率、swap使
 
 ### 1. 码云一键下载安装
 
-deepin20 测试可用
+deepin20.7 测试可用
 
 ```bash
 wget https://gitee.com/q77190858/dde-sys-monitor-plugin/raw/master/bin/libsys_monitor.so && \
@@ -61,11 +61,8 @@ dde-dock
 sudo apt install build-essential
 sudo apt install qt5-default
 sudo apt install dde-dock-dev
-# deepin
 sudo apt install libdtkwidget-dev
-# uos 不确定
-sudo apt install libdtkwidget5.5-dev libdtkgui5.5-dev
-#使用qtcreator集成环境可以直接设计ui界面，目前qt版本是5.11.3，非必要
+#使用qtcreator集成环境可以直接设计ui界面，非必要
 sudo apt install qtcreator
 #deepin/uos用户使用此命令可以获取最新的qtcreator
 sudo apt install io.qt.qtcreator
@@ -104,3 +101,4 @@ cd dde-sys-monitor-plugin
 - 20210216 22:50更新：文字模式增加自定义显示文字功能
 - 20210517 21:34更新：新增CPU温度显示，需要安装lm-sensors
 - 20220125 20:26更新: 支持新的插件函数PluginSizePolicy
+- 20220902 22:43更新：适配作者的dde-dock [pr补丁](https://github.com/linuxdeepin/dde-dock/pull/446)合并，现在不会被遮挡了

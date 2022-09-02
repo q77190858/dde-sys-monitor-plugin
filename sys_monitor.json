@@ -1,4 +1,4 @@
 {
-	"api": "1.2",
+	"api": "1.2.3",
 "depends-daemon-dbus-service": "com.deepin.daemon.Network"
 }
